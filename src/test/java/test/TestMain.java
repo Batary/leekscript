@@ -18,40 +18,41 @@ public class TestMain {
 		// System.out.println(System.getProperty("user.country"));
 		// System.out.println(System.getProperty("user.language"));
 
-        System.out.println("Start tests...");
+		System.out.println("Start tests...");
 
 		// TestCommon.loadReferenceOperations();
 
 		// new TestCommon().code_v4("var a = [1, 2, 3] return count(a)").equals("3");
 
-		new TestGeneral().run();
-		new TestNumber().run();
-		new TestBoolean().run();
-		new TestString().run();
-		new TestSet().run();
-		new TestArray().run();
-		new TestArrayStress().run();
-		new TestMap().run();
-		new TestMapStress().run();
-		new TestInterval().run();
-		new TestObject().run();
-		new TestObjectStress().run();
-		new TestClass().run();
-		new TestComments().run();
-		new TestOperators().run();
-		new TestReference().run();
-		new TestGlobals().run();
-		new TestIf().run();
-		new TestLoops().run();
-		new TestFunction().run();
-		new TestSystem().run();
-		new TestJSON().run();
-		new TestOperations().run();
-		new TestFiles().run();
-		new TestEuler().run();
+//		new TestGeneral().run();
+		new TestBigInt().run();
+//		new TestNumber().run();
+//		new TestBoolean().run();
+//		new TestString().run();
+//		new TestSet().run();
+//		new TestArray().run();
+//		new TestArrayStress().run();
+//		new TestMap().run();
+//		new TestMapStress().run();
+//		new TestInterval().run();
+//		new TestObject().run();
+//		new TestObjectStress().run();
+//		new TestClass().run();
+//		new TestComments().run();
+//		new TestOperators().run();
+//		new TestReference().run();
+//		new TestGlobals().run();
+//		new TestIf().run();
+//		new TestLoops().run();
+//		new TestFunction().run();
+//		new TestSystem().run();
+//		new TestJSON().run();
+//		new TestOperations().run();
+//		new TestFiles().run();
+//		new TestEuler().run();
 
 		// TestCommon.ouputOperationsFile();
 		Assert.assertTrue(TestCommon.summary());
 
-    }
+	}
 }

@@ -88,6 +88,7 @@ public class JavaWriter {
 	}
 
 	public AICode getCode() {
+		System.out.println(mCode.toString());
 		return new AICode(mCode.toString(), mLinesFile.toString(), mLines, mFilesList);
 	}
 
@@ -196,17 +197,23 @@ public class JavaWriter {
 
 	public void compileConvert(MainLeekBlock mainblock, int index, Expression value, Type type) {
 
-		// System.out.println("convert " + value.getType() + " to " + type);
-		if (type == Type.REAL && value.getType().isIntOrReal()) {
+		 System.out.println("convert " + value.getType().getJavaName(4) + " to " + type.getJavaName(4));
+		if (type == Type.REAL && value.getType().isNumber()) {
 			addCode("(");
 			value.writeJavaCode(mainblock, this);
 			addCode(").doubleValue()");
 			return;
 		}
-		if (type == Type.INT && value.getType().isIntOrReal()) {
+		if (type == Type.INT && value.getType().isNumber()) {
 			addCode("(");
 			value.writeJavaCode(mainblock, this);
 			addCode(").longValue()");
+			return;
+		}
+		if (type == Type.BIG_INT && value.getType().isNumber()) {
+			addCode("BigIntegerValue.valueOf(");
+			value.writeJavaCode(mainblock, this);
+			addCode(")");
 			return;
 		}
 		var cast = type.accepts(value.getType());
@@ -249,7 +256,7 @@ public class JavaWriter {
 				return;
 			}
 		}
-		// int?, real?
+		// int?, real?, big_integer?
 		if (type instanceof CompoundType ct) {
 			if (ct.getTypes().size() == 2) {
 				if (ct.getTypes().stream().anyMatch(t -> t == Type.NULL)) {
@@ -263,6 +270,24 @@ public class JavaWriter {
 							}
 							if (t == Type.INT && value.getType() == Type.REAL) { // double -> Integer
 								addCode("((long) (");
+								value.writeJavaCode(mainblock, this);
+								addCode("))");
+								return;
+							}
+							if (t == Type.INT && value.getType() == Type.BIG_INT) { // bigint -> Integer
+								addCode("((");
+								value.writeJavaCode(mainblock, this);
+								addCode(").longValue())");
+								return;
+							}
+							if (t == Type.REAL && value.getType() == Type.BIG_INT) { // bigint -> double
+								addCode("((");
+								value.writeJavaCode(mainblock, this);
+								addCode(").doubleValue())");
+								return;
+							}
+							if (t == Type.BIG_INT && value.getType().isNumber()) { // int/double -> bigint
+								addCode("(BigIntegerValue.valueOf(");
 								value.writeJavaCode(mainblock, this);
 								addCode("))");
 								return;
@@ -431,6 +456,9 @@ public class JavaWriter {
 		if (type == Type.INT) {
 			return "longint(" + v + ")";
 		}
+		if (type == Type.BIG_INT) {
+			return "bigint(" + v + ")";
+		}
 		if (type == Type.REAL) {
 			return "real(" + v + ")";
 		}
@@ -441,6 +469,7 @@ public class JavaWriter {
 			if (ct.getTypes().size() == 2 && ct.getTypes().stream().anyMatch(t -> t == Type.NULL)) {
 				for (var t : ct.getTypes()) {
 					if (t != Type.NULL) {
+						if (t == Type.BIG_INT) return "BigIntegerValue.valueOf(" + v + ")";
 						if (t == Type.INT) return "(Long) " + v;
 						if (t == Type.REAL) return "(Double) " + v;
 						if (t == Type.BOOL) return "(Boolean) " + v;

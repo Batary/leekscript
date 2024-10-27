@@ -30,14 +30,17 @@ public class LeekFunctions {
 		method("abs", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.REAL, new Type[] { Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT }),
 		});
 		method("min", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.REAL, new Type[] { Type.REAL, Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.BIG_INT }),
 		});
 		method("max", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.REAL, new Type[] { Type.REAL, Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.BIG_INT }),
 		});
 		method("cos", "Number", 30, true, Type.REAL, new Type[] { Type.REAL });
 		method("sin", "Number", 30, true, Type.REAL, new Type[] { Type.REAL });
@@ -51,14 +54,17 @@ public class LeekFunctions {
 		method("ceil", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.INT, new Type[] { Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT }),
 		});
 		method("floor", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.INT, new Type[] { Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT }),
 		});
 		method("round", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.INT, new Type[] { Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT }),
 		});
 		method("sqrt", "Number", 8, true, Type.REAL, new Type[] { Type.REAL });
 		method("cbrt", "Number", 62, true, Type.REAL, new Type[] { Type.REAL });

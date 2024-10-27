@@ -550,9 +550,20 @@ public class LeekExpression extends Expression {
 			// }
 			return;
 		case Operators.INTEGER_DIVISION: // Division entière
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" / ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" / ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") intdiv(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 		case Operators.POWER: // Puissance
 			if (mExpression1.getType() == Type.NULL && mExpression2.getType() == Type.NULL) {
@@ -571,34 +582,100 @@ public class LeekExpression extends Expression {
 			return;
 			// Les binaires
 		case Operators.BITAND:
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" & ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" & ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") band(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 		case Operators.BITOR:
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" | ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" | ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") bor(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 		case Operators.BITXOR:
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" ^ ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" ^ ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") bxor(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 		case Operators.SHIFT_LEFT:
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" << ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" << ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") shl(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 		case Operators.SHIFT_RIGHT:
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" >> ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" >> ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") shr(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 		case Operators.SHIFT_UNSIGNED_RIGHT:
-			writer.getInt(mainblock, mExpression1);
-			writer.addCode(" >>> ");
-			writer.getInt(mainblock, mExpression2);
+			if (mExpression1.getType().isPrimitiveNumber() && mExpression2.getType().isPrimitiveNumber()) {
+				writer.getInt(mainblock, mExpression1);
+				writer.addCode(" >>> ");
+				writer.getInt(mainblock, mExpression2);
+			} else {
+				if (type.isPrimitive()) {
+					writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+				}
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") ushr(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(", ");
+				mExpression2.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			}
 			return;
 
 		// Les logiques
@@ -880,14 +957,30 @@ public class LeekExpression extends Expression {
 			writer.addCode(")");
 			return;
 		case Operators.AS:
-			if (mExpression2 instanceof LeekType lt) {
-				if (lt.getType().accepts(mExpression1.getType()) != CastType.EQUALS) {
+			if (mExpression2.getType() == Type.BIG_INT && mExpression1.getType().isNumber()) {
+				writer.addCode("BigIntegerValue.valueOf(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			} else if (mExpression1.getType() == Type.BIG_INT) {
+				if (mExpression2.getType() == Type.INT) {
 					writer.addCode("(");
-					mExpression2.writeJavaCode(mainblock, writer);
-					writer.addCode(") ");
+					mExpression1.writeJavaCode(mainblock, writer);
+					writer.addCode(").longValue()");
+				} else if (mExpression2.getType() == Type.REAL) {
+					writer.addCode("(");
+					mExpression1.writeJavaCode(mainblock, writer);
+					writer.addCode(").doubleValue()");
 				}
+			} else {
+				if (mExpression2 instanceof LeekType lt) {
+					if (lt.getType().accepts(mExpression1.getType()) != CastType.EQUALS) {
+						writer.addCode("(");
+						mExpression2.writeJavaCode(mainblock, writer);
+						writer.addCode(") ");
+					}
+				}
+				mExpression1.writeJavaCode(mainblock, writer);
 			}
-			mExpression1.writeJavaCode(mainblock, writer);
 			return;
 		case Operators.IN:
 			writer.addCode("operatorIn(");
@@ -1114,7 +1207,11 @@ public class LeekExpression extends Expression {
 			type = Type.BOOL;
 		}
 		else if (mOperator == Operators.BITAND || mOperator == Operators.BITNOT || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR || mOperator == Operators.SHIFT_LEFT || mOperator == Operators.SHIFT_RIGHT || mOperator == Operators.SHIFT_UNSIGNED_RIGHT || mOperator == Operators.INTEGER_DIVISION) {
-			type = Type.INT;
+			if (mExpression1.getType() == Type.BIG_INT || mExpression2.getType() == Type.BIG_INT) {
+				type = Type.BIG_INT;
+			} else {
+				type = Type.INT;
+			}
 		}
 		else if (mOperator == Operators.ADD) {
 			type = mExpression1.getType().add(mExpression2.getType());
@@ -1129,7 +1226,11 @@ public class LeekExpression extends Expression {
 			type = mExpression1.getType().mul(mExpression2.getType());
 		}
 		else if (mOperator == Operators.DIVIDE && compiler.getVersion() > 1) {
-			type = Type.REAL; // In V1, result can be null if division by 0
+			if (mExpression1.getType() == Type.BIG_INT || mExpression2.getType() == Type.BIG_INT) {
+				type = Type.BIG_INT;
+			} else {
+				type = Type.REAL; // In V1, result can be null if division by 0
+			}
 		}
 		else if (mOperator == Operators.UNARY_MINUS) {
 			type = mExpression2.getType();

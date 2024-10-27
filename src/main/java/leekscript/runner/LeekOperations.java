@@ -17,6 +17,7 @@ public class LeekOperations {
 	}
 
 	public static Object clone(AI ai, Object value, int level) throws LeekRunException {
+		// TODO bigint
 		if (value instanceof LegacyArrayLeekValue) {
 			if (level == 0) return value;
 			var array = (LegacyArrayLeekValue) value;

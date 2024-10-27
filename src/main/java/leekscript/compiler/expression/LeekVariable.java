@@ -134,6 +134,7 @@ public class LeekVariable extends Expression {
 
 	@Override
 	public void preAnalyze(WordCompiler compiler) throws LeekCompilerException {
+		System.out.println(token.getWord());
 		if (this.type == VariableType.SUPER) {
 			return; // Déjà OK
 		}
@@ -295,6 +296,8 @@ public class LeekVariable extends Expression {
 			if (classDeclaration.internal) {
 				if (token.getWord().equals("Array") && mainblock.getVersion() <= 3) {
 					writer.addCode("legacyArrayClass");
+				} else if (token.getWord().equals("BigInteger")) {
+					writer.addCode("bigIntegerClass");
 				} else {
 					writer.addCode(token.getWord().toLowerCase() + "Class");
 				}

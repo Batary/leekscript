@@ -1,5 +1,7 @@
 package leekscript.runner.classes;
 
+import leekscript.runner.values.BigIntegerValue;
+
 import leekscript.runner.AI;
 
 public class NumberClass {
@@ -11,6 +13,10 @@ public class NumberClass {
 	public static double abs(AI ai, double x) {
 		return Math.abs(x);
 	}
+	
+	public static BigIntegerValue abs(AI ai, BigIntegerValue x) {
+		return x.abs();
+	}
 
 	public static long min(AI ai, long x, long y) {
 		return Math.min(x, y);
@@ -19,6 +25,10 @@ public class NumberClass {
 	public static double min(AI ai, double x, double y) {
 		return Math.min(x, y);
 	}
+	
+	public static BigIntegerValue min(AI ai, BigIntegerValue x, BigIntegerValue y) {
+		return x.min(y);
+	}
 
 	public static long max(AI ai, long x, long y) {
 		return Math.max(x, y);
@@ -26,6 +36,10 @@ public class NumberClass {
 
 	public static double max(AI ai, double x, double y) {
 		return Math.max(x, y);
+	}
+	
+	public static BigIntegerValue max(AI ai, BigIntegerValue x, BigIntegerValue y) {
+		return x.max(y);
 	}
 
 	public static double cos(AI ai, double x) {
@@ -63,8 +77,12 @@ public class NumberClass {
 	public static double toDegrees(AI ai, double x) {
 		return x * 180 / Math.PI;
 	}
-
+	
 	public static long ceil(AI ai, long x) {
+		return x;
+	}
+
+	public static BigIntegerValue ceil(AI ai, BigIntegerValue x) {
 		return x;
 	}
 
@@ -76,11 +94,19 @@ public class NumberClass {
 		return x;
 	}
 
+	public static BigIntegerValue floor(AI ai, BigIntegerValue x) {
+		return x;
+	}
+
 	public static long floor(AI ai, double x) {
 		return (long) Math.floor(x);
 	}
 
 	public static long round(AI ai, long x) {
+		return x;
+	}
+
+	public static BigIntegerValue round(AI ai, BigIntegerValue x) {
 		return x;
 	}
 
@@ -145,17 +171,29 @@ public class NumberClass {
 	public static double hypot(AI ai, double x, double y) {
 		return Math.hypot(x, y);
 	}
-
+	
 	public static long signum(AI ai, double x) {
 		return (long) Math.signum(x);
 	}
 
+	public static long signum(AI ai, BigIntegerValue x) {
+		return (long) x.signum();
+	}
+	
 	public static long bitCount(AI ai, long x) {
 		return Long.bitCount(x);
 	}
 
+	public static long bitCount(AI ai, BigIntegerValue x) {
+		return (long) x.bitCount();
+	}
+	
 	public static long trailingZeros(AI ai, long x) {
 		return Long.numberOfTrailingZeros(x);
+	}
+
+	public static long trailingZeros(AI ai, BigIntegerValue x) {
+		return (long) x.getLowestSetBit();
 	}
 
 	public static long leadingZeros(AI ai, long x) {
@@ -177,13 +215,21 @@ public class NumberClass {
 	public static long rotateRight(AI ai, long x, long y) {
 		return Long.rotateRight(x, (int) y);
 	}
-
+	
 	public static String binString(AI ai, long x) {
 		return Long.toBinaryString(x);
 	}
 
+	public static String binString(AI ai, BigIntegerValue x) {
+		return x.toString(2);
+	}
+	
 	public static String hexString(AI ai, long x) {
 		return Long.toHexString(x);
+	}
+
+	public static String hexString(AI ai, BigIntegerValue x) {
+		return x.toString(16);
 	}
 
 	public static long realBits(AI ai, double x) {
