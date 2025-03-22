@@ -1,6 +1,6 @@
 package leekscript.compiler.expression;
 
-import leekscript.runner.values.BigIntegerValue;
+import java.math.BigInteger;
 
 import leekscript.common.Type;
 import leekscript.compiler.JavaWriter;
@@ -9,9 +9,9 @@ import leekscript.compiler.bloc.MainLeekBlock;
 
 public class LeekBigInteger extends LeekNumber {
 
-	private final BigIntegerValue value;
+	private final BigInteger value;
 
-	public LeekBigInteger(Token token, BigIntegerValue value) {
+	public LeekBigInteger(Token token, BigInteger value) {
 		super(token, Type.BIG_INT);
 		this.value = value;
 	}
@@ -28,7 +28,7 @@ public class LeekBigInteger extends LeekNumber {
 
 	@Override
 	public void writeJavaCode(MainLeekBlock mainblock, JavaWriter writer) {
-		writer.addCode("new BigIntegerValue(\"" + value.toString() + "\")");
+		writer.addCode("new BigIntegerValue("+ writer.getAIThis() + ",\"" + value.toString() + "\")");
 	}
 
 	@Override

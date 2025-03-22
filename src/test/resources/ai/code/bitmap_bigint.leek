@@ -1,0 +1,19 @@
+// this file execution costs roughly 1/4 of the standard "bitmap.leek" time
+
+big_integer arr = 111111L;
+big_integer walkable = 123456L;
+
+for (var i in [0..18]) {
+    arr = arr | arr << 64;
+    walkable = walkable | walkable << 64;
+}
+big_integer acc = arr;
+
+for (var k in [0..10000]) {
+    acc = acc | walkable & (arr << 64 | arr >> 64 | arr >> 1 | arr << 1);
+}
+
+//integer ret = acc as Integer;
+//return ret;
+return acc as integer;
+//return acc & 0b1111111111111111111111111111111111111111111111111111111111111111;

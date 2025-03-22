@@ -3,6 +3,7 @@ package leekscript.runner.classes;
 import leekscript.runner.values.BigIntegerValue;
 
 import leekscript.runner.AI;
+import leekscript.runner.LeekRunException;
 
 public class NumberClass {
 
@@ -14,7 +15,7 @@ public class NumberClass {
 		return Math.abs(x);
 	}
 	
-	public static BigIntegerValue abs(AI ai, BigIntegerValue x) {
+	public static BigIntegerValue abs(AI ai, BigIntegerValue x) throws LeekRunException {
 		return x.abs();
 	}
 
@@ -26,7 +27,7 @@ public class NumberClass {
 		return Math.min(x, y);
 	}
 	
-	public static BigIntegerValue min(AI ai, BigIntegerValue x, BigIntegerValue y) {
+	public static BigIntegerValue min(AI ai, BigIntegerValue x, BigIntegerValue y) throws LeekRunException {
 		return x.min(y);
 	}
 
@@ -38,7 +39,7 @@ public class NumberClass {
 		return Math.max(x, y);
 	}
 	
-	public static BigIntegerValue max(AI ai, BigIntegerValue x, BigIntegerValue y) {
+	public static BigIntegerValue max(AI ai, BigIntegerValue x, BigIntegerValue y) throws LeekRunException {
 		return x.max(y);
 	}
 

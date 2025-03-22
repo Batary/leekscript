@@ -12,7 +12,7 @@ public class BasicAILog extends AILog {
 		this.stream = new Stream() {
 			@Override
 			public void write(JSONArray a) {
-				System.out.println(a.toString());
+//				System.out.println(a.toString()); // TODO uncomment this
 			}
 		};
 	}

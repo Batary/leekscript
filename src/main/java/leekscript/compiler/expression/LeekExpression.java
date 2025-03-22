@@ -957,20 +957,20 @@ public class LeekExpression extends Expression {
 			writer.addCode(")");
 			return;
 		case Operators.AS:
-			if (mExpression2.getType() == Type.BIG_INT && mExpression1.getType().isNumber()) {
-				writer.addCode("BigIntegerValue.valueOf(");
+			System.out.println(mExpression1.getType().getJavaName(4) + " as " + mExpression2.getType().getJavaName(4));
+			System.out.println("a");
+			if (mExpression2.getType() == Type.BIG_INT) {
+				writer.addCode("BigIntegerValue.valueOf(" + writer.getAIThis() + ", ");
 				mExpression1.writeJavaCode(mainblock, writer);
 				writer.addCode(")");
-			} else if (mExpression1.getType() == Type.BIG_INT) {
-				if (mExpression2.getType() == Type.INT) {
-					writer.addCode("(");
+			} else if (mExpression2.getType() == Type.INT) {
+					writer.addCode("longint(");
 					mExpression1.writeJavaCode(mainblock, writer);
-					writer.addCode(").longValue()");
-				} else if (mExpression2.getType() == Type.REAL) {
-					writer.addCode("(");
-					mExpression1.writeJavaCode(mainblock, writer);
-					writer.addCode(").doubleValue()");
-				}
+					writer.addCode(")");
+			} else if (mExpression2.getType() == Type.REAL) {
+				writer.addCode("real(");
+				mExpression1.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
 			} else {
 				if (mExpression2 instanceof LeekType lt) {
 					if (lt.getType().accepts(mExpression1.getType()) != CastType.EQUALS) {
@@ -1206,12 +1206,13 @@ public class LeekExpression extends Expression {
 		} else if (mOperator == Operators.NOT || mOperator == Operators.EQUALS_EQUALS || mOperator == Operators.LESS || mOperator == Operators.MORE || mOperator == Operators.MOREEQUALS || mOperator == Operators.LESSEQUALS || mOperator == Operators.EQUALS || mOperator == Operators.AND || mOperator == Operators.OR || mOperator == Operators.XOR || mOperator == Operators.NOTEQUALS || mOperator == Operators.NOT_EQUALS_EQUALS || mOperator == Operators.INSTANCEOF || mOperator == Operators.IN) {
 			type = Type.BOOL;
 		}
-		else if (mOperator == Operators.BITAND || mOperator == Operators.BITNOT || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR || mOperator == Operators.SHIFT_LEFT || mOperator == Operators.SHIFT_RIGHT || mOperator == Operators.SHIFT_UNSIGNED_RIGHT || mOperator == Operators.INTEGER_DIVISION) {
-			if (mExpression1.getType() == Type.BIG_INT || mExpression2.getType() == Type.BIG_INT) {
-				type = Type.BIG_INT;
-			} else {
-				type = Type.INT;
-			}
+		else if (mOperator == Operators.BITAND || mOperator == Operators.BITNOT || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR || mOperator == Operators.SHIFT_LEFT || mOperator == Operators.SHIFT_RIGHT || mOperator == Operators.SHIFT_UNSIGNED_RIGHT) {
+//			if (mExpression1.getType() == Type.BIG_INT || mExpression2.getType() == Type.BIG_INT) {
+//				type = Type.BIG_INT;
+//			} else {
+//				type = Type.INT;
+//			}
+			type = mExpression1.getType().binop(mExpression2.getType());
 		}
 		else if (mOperator == Operators.ADD) {
 			type = mExpression1.getType().add(mExpression2.getType());
@@ -1225,12 +1226,11 @@ public class LeekExpression extends Expression {
 		else if (mOperator == Operators.MULTIPLIE) {
 			type = mExpression1.getType().mul(mExpression2.getType());
 		}
+		else if (mOperator == Operators.INTEGER_DIVISION) {
+			type = mExpression1.getType().intdiv(mExpression2.getType());
+		}
 		else if (mOperator == Operators.DIVIDE && compiler.getVersion() > 1) {
-			if (mExpression1.getType() == Type.BIG_INT || mExpression2.getType() == Type.BIG_INT) {
-				type = Type.BIG_INT;
-			} else {
-				type = Type.REAL; // In V1, result can be null if division by 0
-			}
+			type = mExpression1.getType().div(mExpression2.getType());
 		}
 		else if (mOperator == Operators.UNARY_MINUS) {
 			type = mExpression2.getType();

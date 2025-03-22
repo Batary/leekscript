@@ -1,11 +1,6 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import leekscript.common.Error;
-import leekscript.compiler.LexicalParser;
-import leekscript.runner.LeekConstants;
 
 public class TestBigInt extends TestCommon {
 
@@ -13,17 +8,180 @@ public class TestBigInt extends TestCommon {
 
 		header("Big Numbers");
 
-		section("Basic numbers");
+		section("Performance");
+		
+//		code_v4_("big_integer a = 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0"); // warmup
+//		
+//		code_v4_("for (var k in [0..10000000]) {var a = 5;}; return 0;").equals("0");
+//		code_v4_("for (var k in [0..10000000]) {var a = 5L;}; return 0;").equals("0"); // x4-5 slower
+//		
+//		code_v4_("var a = 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0");
+//		code_v4_("big_integer a = 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0");
+//		code_v4_("big_integer a = 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0");
+//		code_v4_("big_integer a = (1L << 1000) + 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0");
+//		
+//		// test <<
+//		code_v4_("for (var k in [0..100000])var a = 1 << 1; return 0;").equals("0"); // ref
+//		code_v4_("big_integer a = 0;for (var k in [0..100000])a = 1L << 1; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 78; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 156; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 312; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 625; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 1250; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 2500; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 5000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 10000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 20000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 40000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 80000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 160000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 320000; return 0;").equals("0");
+//		code_v4_("for (var k in [0..100000])big_integer a = 1L << 640000; return 0;").equals("0");
+////		code_v4_("for (var k in [0..100000])big_integer a = 1L << 1280000; return 0;").equals("0");
+////		code_v4_("for (var k in [0..100000])big_integer a = 1L << 2560000; return 0;").equals("0");
+////		code_v4_("for (var k in [0..100000])big_integer a = 1L << 5120000; return 0;").equals("0");
+//	
+//		// test &
+//		code_v4_("var a = 1, b = 1; for (var k in [0..100000])a = a & b; return 0;").equals("0"); // ref
+//		code_v4_("big_integer a = 1, b = 1; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000; for (var k in [0..100000]) a = a & b; return 0;").equals("0");
+//		
+//		// test |
+//		code_v4_("var a = 1, b = 1; for (var k in [0..100000])a = a | b; return 0;").equals("0"); // ref
+//		code_v4_("big_integer a = 1, b = 1; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000; for (var k in [0..100000]) a = a | b; return 0;").equals("0");
+//		
+//		// test ^
+//		code_v4_("var a = 1, b = 1; for (var k in [0..100000])a = a ^ b; return 0;").equals("0"); // ref
+//		code_v4_("big_integer a = 1, b = 1; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000; for (var k in [0..100000]) a = a ^ b; return 0;").equals("0");
+//		
+//		// test ~
+//		code_v4_("var b = 1; for (var k in [0..100000])b = ~b; return 0;").equals("0"); // ref
+//		code_v4_("big_integer b = 1; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 156; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 312; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 625; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 1250; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 2500; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 5000; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 10000; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 20000; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		code_v4_("big_integer b = 1L << 40000; for (var k in [0..100000]) b = ~b; return 0;").equals("0");
+//		
+//		// test +
+//		code_v4_("integer a = 1, b = 1; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000; for (var k in [0..100000]) a = b + b; return 0;").equals("0");
+//		
+//		// test *
+//		code_v4_("var a = 1, b = 1; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000; for (var k in [0..100000]) a = b * b; return 0;").equals("0");
+//		
+//		
+//		// test /
+//		code_v4_("var a = 1, b = 10, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2.0");
+//		code_v4_("big_integer a = 1, b = 1L << 156, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 312, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 625, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 1250, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 2500, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 5000, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 10000, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		code_v4_("big_integer a = 1, b = 1L << 40000, c = b / 2; for (var k in [0..100000]) a = b / c; return a;").equals("2");
+//		
+//		
+//		// test **
+//		code_v4_("var a = 1, b = 10, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000, c = 30; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 3; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 6; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 12; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 24; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 48; for (var k in [0..100000]) a = b ** c; return 0;").equals("0");
+//		
+//		// test %
+//		code_v4_("var a = 1, b = 10, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 156, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 312, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 625, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 1250, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 2500, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 5000, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 10000, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 40000, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 3; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 6; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 12; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 24; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 48; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 480; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 4800; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = 48000; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+//		code_v4_("big_integer a = 1, b = 1L << 20000, c = b/2; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
+	
+//		section("Basic numbers");
 //		code_v4_("return 0L").equals("0");
 //		code_v4_("return -1L").equals("-1");
 //		code_v4_("return -(-1L)").equals("1");
-		
-		// does not work (BigInteger does not parse this notation)
-//		code_v4_("return -1e100L").equals("-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-		// need to use long to go from double to BigInteger, so we lose information
-//		code_v4_("return -1e100 as BigInteger").equals("-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-//		code_v4_("return 1e100 as big_integer").equals("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-
+//
+//		// does not work (BigInteger does not parse this notation)
+//		//code_v4_("return -1e100L").equals("-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+//		// need to use long to go from double to BigInteger, so we lose information
+//		// code_v4_("return -1e100 as BigInteger").equals("-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+//		// code_v4_("return 1e100 as big_integer").equals("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+//
 //		code_v4_("return 1e+3 as big_integer").equals("1000");
 //		code_v4_("return 1e+3+2 as BigInteger").equals("1002");
 //		code_v4_("return 1e+3-2 as BigInteger").equals("998");
@@ -32,15 +190,18 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("return 1L as big_integer").equals("1");
 //		code_v4_("return 1L as real").equals("1.0");
 //		code_v4_("return 1L as integer").equals("1");
-
-		section("Class");
+//		code_v4_("big_integer x = 1L; return x as integer").equals("1");
+//		code_v4_("var x = 1L; return x as integer").equals("1");
+//		code_v4_("BigInteger x = 1L; return x as integer").equals("1");
+//
+//		section("Class");
 //		code_v4_("return BigInteger();").equals("0");
 //		code_v4_("return new BigInteger();").equals("0");
 //		code_v4_("return BigInteger() + 1;").equals("1");
 //		code_v4_("return BigInteger() - 1;").equals("-1");
 //		code_v4_("return (BigInteger() + 1) << 100;").equals("1267650600228229401496703205376");
-
-		section("Lexical errors");
+//
+//		section("Lexical errors");
 //		code_v4_("123451234548975415644561534894564896785416r").error(Error.INVALID_NUMBER);
 //		code_v4_("0b011001711111111111111111111111111111111111111111111111111111111111111111111111111111111111L").error(Error.INVALID_NUMBER);
 //		code_v4_("0x+123451234548975415644561534894564896785416").error(Error.INVALID_NUMBER);
@@ -53,8 +214,8 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("0b101x01011111111111111111111111111111111111111111111111111111111111111111111111111111111111").error(Error.INVALID_NUMBER);
 //		code_v4_("0b101.01011111111111111111111111111111111111111111111111111111111111111111111111111111111111").error(Error.INVALID_NUMBER);
 //		code_v4_("0.1L").error(Error.INVALID_NUMBER);
-		
-		section("Basic operations");
+//
+//		section("Basic operations");
 //		code_v4_("return 2L + 5;").equals("7");
 //		code_v4_("return 2 + 1267650600228229401496703205376L;").equals("1267650600228229401496703205378");
 //		code_v4_("return 1267650600228229401496703205376L;").equals("1267650600228229401496703205376");
@@ -78,8 +239,7 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("0xfe54c4ceabf93c4eaeafcde94eba4c79741a7cc8ef43daec6a71ed8fa6cd8b3e41a6f4ea7f4ed9dff8cc3ab61e9a4ec6baf1ea77deb4fa1c").equals("722100440055342029825617696009879717719483550913608718409456486549003139646247155371523487552495527165084677501327990299146441654073884");
 //		code_v4_("return 0b010101010101110101010101011111111110111110111110000000011101101010101001").equals("1574698668551521295017");
 //		code_v4_("return -0b101010101011101010101010111111111101111101111100000000111011010101010010011111100000011111111111110000").equals("-3381639641241763826573319995376");
-
-		
+//
 //		code_v4_("return 5L + 5;").equals("10");
 //		code_v4_("return 10 - 3L;").equals("7");
 //		code_v4_("return -2L + 3;").equals("1");
@@ -104,10 +264,11 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("return (-12) ** 2L;").equals("144");
 //		code_v4_("return -12L + 2;").equals("-10");
 //		code_v4_("var a = [2L, 'a'] return [-a[0], ~a[0]] == [-2, ~2];").equals("true");
-		// TODO operator +x
-		// code_v4_("var a = [2L, 'a'] return [-a[0], +a[0], ~a[0]] == [-2, 2, ~2];").equals("true");
+//		// TODO operator +x
+//		// code_v4_("var a = [2L, 'a'] return [-a[0], +a[0], ~a[0]] == [-2, 2,
+//		// ~2];").equals("true");
 //
-
+//
 //		code_v4_("var x = 5L + 5; return x instanceof BigInteger").equals("true");
 //		code_v4_("var x = 10 - 3L; return x instanceof BigInteger").equals("true");
 //		code_v4_("var x = -2L + 3; return x instanceof BigInteger").equals("true");
@@ -130,8 +291,8 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("var x = (-12) ** 2L; return x instanceof Integer").equals("true");
 //		code_v4_("var x = -12L + 2; return x instanceof BigInteger").equals("true");
 //		code_v4_("var a = [2L, 'a'] return -a[0] instanceof BigInteger && ~a[0] instanceof BigInteger").equals("true");
-		
-		section("Hexadecimal representation");
+//
+//		section("Hexadecimal representation");
 //		code_v4_("return 0x0L;").equals("0");
 //		code_v4_("return 0x00000000L").equals("0");
 //		code_v4_("return 0x1L").equals("1");
@@ -145,578 +306,420 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("return 0xffffffffL").equals("4294967295");
 //		code_v4_("return 0x7FFFFFFFFFFFFFFFL").equals("9223372036854775807");
 //		
-		section("Binary representation");
+//		section("Binary representation");
 //		code_v4_("return 0b0L").equals("0");
 //		code_v4_("return 0b00001L").equals("1");
 //		code_v4_("return 0b1001010110L").equals("598");
 //		code_v4_("return -0b0101101001111L").equals("-2895");
 //		code_v4_("return 0b0111111111111111111111111111111111111111111111111111111111111111L").equals("9223372036854775807");
 //		
-		section("Underscore delimiters");
+//		section("Underscore delimiters");
 //		code_v4_("return 1_000_123L").equals("1000123");
 //		code_v4_("return 1_000__123L").error(Error.MULTIPLE_NUMERIC_SEPARATORS);
 //		code_v4_("return 0x_ffL").equals("255");
-		code_v4_("return 0_x_ff").error(Error.INVALID_NUMBER);
-		code_v4_("return 0_x_ffL").error(Error.INVALID_NUMBER);
 //		code_v4_("return 0xff_ff_ff_ffL").equals("4294967295");
 //		code_v4_("return 0b1001_0101_10L").equals("598");
 //		code_v4_("return 5.001_002_003L").error(Error.INVALID_NUMBER);
 //		code_v4_("return 5.001_002_003L").error(Error.INVALID_NUMBER);
 //		code_v4_("return _1_000_000L").error(Error.UNKNOWN_VARIABLE_OR_FUNCTION);
 //
-//		section("null must not be considered as 0");
-//		code_v4_("return null == 0;").equals("false");
-//		code_v4_("return null < 0;").equals("false");
-//		// code_v4_("null + 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("5 + null").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("5 / null").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("null / 12").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("null * 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("5 * null").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
+//		section("null handling");
+//		code_v4_("return null == 0L;").equals("false");
+//		code_v4_("return null < 0L;").equals("false");
+//		code_v4_("null + 5L").equals("5");
+//		code_v4_("5L + null").equals("5");
+//		//code_v4_("5L / null").equals("∞"); // cast error
+//		code_v4_("null / 12L").equals("0");
+//		code_v4_("null * 5L").equals("0");
+//		code_v4_("5L * null").equals("0");
+//
 //
 //		section("Numbers with variables");
-//		code_v4_("var a = 2 return a++;").equals("2");
-//		code_v4_("var a = 2; return ++a;").equals("3");
-//		code_v4_("var a = 2 return a--;").equals("2");
-//		code_v4_("var a = 2; return --a;").equals("1");
-//		code_v4_("var a = 2 return a += 5;").equals("7");
-//		code_v4_("var a = 2 return a -= 5;").equals("-3");
-//		code_v4_("var a = 2 return a *= 5;").equals("10");
-//		code_v4_("var a = 100 return a /= 5;").equals("20");
-//		code_strict_v1("var a = 100 return a /= 5;").equals("20");
-//		code_strict_v1("any a = 100 return a /= 5;").equals("20");
-//		code_v4_("var a = 100 return a /= 5;").equals("20.0");
-//		code_strict_v2_("var a = 100 return a /= 5;").equals("20");
-//		code_strict_v2_("any a = 100 return a /= 5;").equals("20.0");
-//		code_v4_("var a = 56 return a %= 17;").equals("5");
-//		code_v4_("var a = 15 return a **= 2;").equals("225");
-//		code_v4_("var a = 1.5 return a * 0.5;").equals("0,75");
-//		code_v4_("var a = 1.5 return a * 0.5;").equals("0.75");
-//		// DISABLED_code_v4_("var i = 1m return i = i + 2m;").equals("3");
-//		code_v4_("var a = 10; a += 10 - 2 * 3; return a;").equals("14");
+//		code_v4_("var a = 2L return a++;").equals("2");
+//		code_v4_("var a = 2L; return ++a;").equals("3");
+//		code_v4_("var a = 2L return a--;").equals("2");
+//		code_v4_("var a = 2L; return --a;").equals("1");
+//		code_v4_("var a = 2L return a += 5;").equals("7");
+//		code_v4_("var a = 2 return a += 5L;").equals("7");
+//		code_v4_("var a = 2L return a += 5L;").equals("7");
+//		code_v4_("var a = 2L return a -= 5;").equals("-3");
+//		code_v4_("var a = 2L return a *= 5;").equals("10");
+//		code_v4_("var a = 100L return a /= 5;").equals("20");
+//		code_v4_("var a = 100 return a /= 5L;").equals("20");
+//		code_v4_("var a = 100L return a /= 5L;").equals("20");
+//		code_v4_("var a = 56L return a %= 17;").equals("5");
+//		code_v4_("var a = 56 return a %= 17L;").equals("5");
+//		code_v4_("var a = 56L return a %= 17L;").equals("5");
+//		code_v4_("var a = 15L return a **= 2;").equals("225");
+////		code_v4_("var a = 1L return a * 0.5;").equals("0.5"); // 0.5 converted to bigint
+////		code_v4_("var a = 1.5 return a * 2L;").equals("3");	  // 1.5 converted to bigint
+//		code_v4_("var i = 1L return i = i + 2L;").equals("3");
+//		code_v4_("var a = 10L; a += 10L - 2 * 3L; return a;").equals("14");
 //
 //		section("multiple operations");
-//		code_v4_("return (33 - 2) / 2;").equals("15,5");
-//		code_v4_("return (33 - 2) / 2;").equals("15.5");
-//		code_v4_("return 12 < (45 / 4);").equals("false");
-//		code_v4_("return 12 == (24 / 2);").equals("true");
-//		// code_v4_("2.5 + 4.7").almost(7.2);
-//		// DISABLED_code_v4_("return 2.5 × 4.7;").equals("11.75");
-//		code_v4_("return 5 * 2 + 3 * 4;").equals("22");
-//
-//		section("String conversions");
-//		// DISABLED_code_v4_("65.char()").equals("'A'");
-//		// DISABLED_code_v4_("char(65)").equals("'A'");
-//		// DISABLED_code_v4_("126.char()").equals("'~'");
-//		// DISABLED_code_v4_("char(128040)").equals("'🐨'");
-//		// DISABLED_code_v4_("126.784.char()").equals("'~'");
-//		// DISABLED_code_v4_("char([126.784, 'hello'][0])").equals("'~'");
-//		// DISABLED_code_v4_("let c = 65 (c.char())").equals("'A'");
-//		// DISABLED_code_v4_("let c = 65 (c.char() + '!')").equals("'A!'");
-//		// DISABLED_code_v4_("0x2764.char()").equals("'❤'");
+//		code_v4_("return (33 - 2) / 2L;").equals("15");
+//		code_v4_("return (32L - 2) / 2;").equals("15");
+//		code_v4_("return 12 < (45L / 4);").equals("false");
+//		code_v4_("return 12L == (24 / 2);").equals("true");
+//		code_v4_("return (2.5 * 4.7) + 0L;").equals("11");
+//		code_v4_("return (2.5 * 4.7) as BigInteger;").equals("11");
+//		code_v4_("return 5L * 2L + 3L * 4;").equals("22");
 //
 //		section("Multiple precision numbers");
-//		// DISABLED_code_v4_("12344532132423").equals("12344532132423");
-//		// DISABLED_code_v4_("var a = 10m a").equals("10");
-//		// DISABLED_code_v4_("0m").equals("0");
-//		// DISABLED_code_v4_("0xf45eab5c9d13aab44376beff").equals("75628790656539575381594128127");
-//		// TODO floating-point multiple precision numbers
-//		// TODO code_v4_("123456.78910m").equals("123456.7891");
-//		// TODO code_v4_("123456789123456789123456789.5").equals("");
-//		// TODO code_v4_("1234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567883459720303390827584524332795121111123456788999999999999999999999999999999999.5").equals("");
-//		// DISABLED_code_v4_("let a = 1209876543789765432456765432087654321 a").equals("1209876543789765432456765432087654321");
-//		// DISABLED_code_v4_("let a = { 1209876543789765432456765432087654321 } a").equals("1209876543789765432456765432087654321");
-//		// DISABLED_code_v4_("var a = 5m a = 12m").equals("12");
-//		// DISABLED_code_v4_("var a = 5m a = 12m a").equals("12");
-//		// DISABLED_code_v4_("let f = -> 12m f().string()").equals("'12'");
+//		 code_v4_("123445321324234567895431235648945674894561564523489756489").equals("123445321324234567895431235648945674894561564523489756489");
+//		 code_v4_("var a = 10L a").equals("10");
+//		 code_v4_("0L").equals("0");
+//		 code_v4_("0xf45eab5c9d13aab44376beff").equals("75628790656539575381594128127");
+//		 code_v4_("0xf45eab5c9d13aab44376beffL").equals("75628790656539575381594128127");
+//		 code_v4_("var a = 1209876543789765432456765432087654321 a").equals("1209876543789765432456765432087654321");
+//		 code_v4_("var a = { id:1209876543789765432456765432087654321 } a.id").equals("1209876543789765432456765432087654321");
+//		 code_v4_("var a = 5L a = 12L").equals("12");
+//		 code_v4_("var a = 5L a = 12L a").equals("12");
+//		 code_v4_("var f = -> 12L string(f())").equals("\"12\"");
 //
-//		section("Integer division by zero");
-//		// code_v4_("1 \\ 0").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// code_v4_("1 % 0").exception(ls::vm::Exception::DIVISION_BY_ZERO);
+////		section("Integer division by zero");
+////		 code_v4_("1L \\ 0").exception(ls::vm::Exception::DIVISION_BY_ZERO);
+////		 code_v4_("1L % 0").exception(ls::vm::Exception::DIVISION_BY_ZERO);
 //
-//		/*
-//		 * Number standard library
-//		 */
-//		// header("Number standard library");
 //		section("Constructor");
-//		code_v4_("return Number").equals("<class Number>");
-//		// DISABLED_code_v4_("Number()").equals("0");
-//		// DISABLED_code_v4_("Number(12)").equals("12");
-//		// DISABLED_code_v4_("Number(12.5)").equals("12.5");
-//		// DISABLED_code_v4_("Number(12l)").equals("12");
-//		// DISABLED_code_v4_("Number(12m)").equals("12");
-//		// DISABLED_code_v4_("[Number(), 'str']").equals("[0, 'str']");
-//		// DISABLED_code_v4_("new Number").equals("0");
-//		// DISABLED_code_v4_("new Number()").equals("0");
-//		// DISABLED_code_v4_("new Number(12)").equals("12");
-//		// DISABLED_code_v4_("['', new Number()]").equals("['', 0]");
-//		// DISABLED_code_v4_("['', new Number]").equals("['', 0]");
-//		// DISABLED_code_v4_("['', Number()]").equals("['', 0]");
-//		// DISABLED_code_v4_("['', new Number(12)]").equals("['', 12]");
-//		// DISABLED_code_v4_("['', Number(12)]").equals("['', 12]");
+//		code_v4_("return BigInteger").equals("<class BigInteger>");
+//		code_v4_("BigInteger()").equals("0");
 //
 //		section("Constants");
-//		code_v4_("return PI").equals("3,142");
-//		code_v4_("return PI").almost(3.141592653589793116);
-//		code_v4_("return ['', PI]").equals("[\"\", 3,142]");
-//		code_v4_("return ['', PI]").equals("[\"\", 3.141592653589793]");
-//		code_v4_("return 2 * PI").equals("6,283");
-//		code_v4_("return 2 * PI").almost(6.283185307179586232);
-//		code_v4_("return E").equals("2,718");
-//		code_v4_("return E").almost(2.718281828459045091);
-//		// code_v4_("phi").almost(1.618033988749894903);
-//		// code_v4_("epsilon").almost(0.000000000000000222);
-//		// code_v4_("let pi = 3 pi").equals("3");
-//		// code_v4_("{ let pi = 3 } pi").almost(3.141592653589793116);
-//		code_v4_("return Infinity").equals("∞");
-//		code_v4_("return NaN").equals("NaN");
-//		code_v4_("return NaN === NaN").equals("false");
-//		code_v4_("return 0 / 0 === NaN").equals("false");
-//
-//		section("Constants in class");
-//		code_v4_("return Real.MIN_VALUE").equals("4.9E-324");
-//		code_v4_("return Real.MIN_VALUE.class").equals("<class Real>");
-//		code_v4_("return Real.MAX_VALUE").equals("1.7976931348623157E308");
-//		code_v4_("return Real.MAX_VALUE.class").equals("<class Real>");
-//		code_v4_("return Real.MAX_VALUE + Real.MIN_VALUE").equals("1.7976931348623157E308");
-//		code_v4_("return Integer.MIN_VALUE").equals("-9223372036854775808");
-//		code_v4_("return Integer.MIN_VALUE.class").equals("<class Integer>");
-//		code_v4_("return Integer.MAX_VALUE").equals("9223372036854775807");
-//		code_v4_("return Integer.MIN_VALUE + Integer.MAX_VALUE").equals("-1");
-//		code_v4_("return Integer.MAX_VALUE.class").equals("<class Integer>");
-//		code_v4_("Integer.MIN_VALUE = 0").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Integer.MIN_VALUE += 10").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Integer.MAX_VALUE = 0").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Integer.MAX_VALUE += 10").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Real.MIN_VALUE = 0").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Real.MIN_VALUE += 0").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Real.MAX_VALUE = 0").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
-//		code_v4_("Real.MAX_VALUE += 0").error(Error.CANNOT_ASSIGN_FINAL_FIELD);
+//		code_v4_("return PI as big_integer").equals("3");
+//		code_v4_("return 0L == NaN").equals("false");
+//		code_v4_("return 0L == ∞").equals("false");
+//		code_v4_("return 0L == -∞").equals("false");
 //
 //		/*
 //		 * Operators
 //		 */
 //		section("Number.operator unary -");
-//		code_v4_("var a = [12, ''] var b = a[0]; return -b;").equals("-12");
-//		code_v4_("return -(12 ** 2);").equals("-144");
-//		// DISABLED_code_v4_("return -(12m ** 2);").equals("-144");
-//		// DISABLED_code_v4_("-100m").equals("-100");
+//		code_v4_("var a = [12L, ''] var b = a[0]; return -b;").equals("-12");
+//		code_v4_("return -(12L ** 2L);").equals("-144");
 //
 //		section("Number.operator unary !");
-//		code_v4_("var a = [12, ''] var b = a[0]; return !b;").equals("false");
+//		code_v4_("var a = [12L, ''] var b = a[0]; return !b;").equals("false");
 //
 //		section("Number.operator unary ~");
-//		code_v4_("var a = [12, ''] var b = a[0]; return ~b;").equals("-13");
-//		code_v4_("var a = 12 return ['', ~a];").equals("[\"\", -13]");
+//		code_v4_("var a = [12L, ''] var b = a[0]; return ~b;").equals("-13");
+//		code_v4_("var a = 12L return ['', ~a];").equals("[\"\", -13]");
 //
 //		section("Number.operator ++x");
-//		code_v4_("var a = 20; return ++a;").equals("21");
-//		code_v4_("var a = 30; ++a return a;").equals("31");
-//		// DISABLED_code_v4_("var a = 20m; return ++a;").equals("21");
-//		// DISABLED_code_v4_("var a = 20m; ++a return a;").equals("21");
-//		// DISABLED_code_v4_("var a = 20m; let b = ++a return b;").equals("21");
-//		// code_v4_("++5").error(ls::Error::Type::VALUE_MUST_BE_A_LVALUE, {"5"});
-//		code_v4_("var a = 5 return ['', ++a];").equals("[\"\", 6]");
+//		code_v4_("var a = 20L; return ++a;").equals("21");
+//		code_v4_("var a = 30L; ++a return a;").equals("31");
+//		code_v4_("var a = 20L; var b = ++a return b;").equals("21");
+//		code_v4_("var a = 20L; var b = ++a return b instanceof BigInteger;").equals("true");
+//		code_v4_("var a = 5L return ['', ++a];").equals("[\"\", 6]");
 //
 //		section("Number.operator --x");
-//		code_v4_("var a = 20; return --a;").equals("19");
-//		code_v4_("var a = 30; --a return a;").equals("29");
-//		// code_v4_("--5").error(ls::Error::Type::VALUE_MUST_BE_A_LVALUE, {"5"});
-//		code_v4_("var a = 5 return ['', --a];").equals("[\"\", 4]");
+//		code_v4_("var a = 20L; return --a;").equals("19");
+//		code_v4_("var a = 30L; --a return a;").equals("29");
+//		code_v4_("var a = 5L return ['', --a];").equals("[\"\", 4]");
 //
 //		section("Number.operator x++");
-//		code_v4_("var a = 20; return a++;").equals("20");
-//		code_v4_("var a = 20; a++ return a;").equals("21");
-//		code_v4_("var a = 20; var b = a++ return b;").equals("20");
-//		// DISABLED_code_v4_("var a = 20m; a++").equals("20");
-//		// DISABLED_code_v4_("var a = 20m; a++ a").equals("21");
-//		// DISABLED_code_v4_("var a = 20m; var b = a++ b").equals("20");
-//		// code_v4_("5++").error(ls::Error::Type::VALUE_MUST_BE_A_LVALUE, {"5"});
+//		code_v4_("var a = 20L; return a++;").equals("20");
+//		code_v4_("var a = 20L; a++ return a;").equals("21");
+//		code_v4_("var a = 20L; var b = a++ return b;").equals("20");
 //
 //		section("Number.operator x--");
-//		code_v4_("var a = 20; return a--;").equals("20");
-//		code_v4_("var a = 20; a-- return a;").equals("19");
-//		code_v4_("var a = 20; var b = a-- return b;").equals("20");
-//		// DISABLED_code_v4_("var a = 20m; a--").equals("20");
-//		// DISABLED_code_v4_("var a = 20m; a-- a").equals("19");
-//		// DISABLED_code_v4_("var a = 20m; var b = a-- b").equals("20");
-//		// code_v4_("5--").error(ls::Error::Type::VALUE_MUST_BE_A_LVALUE, {"5"});
-//
-//		section("Number.operator in");
-//		// TODO idea : a in b returns true if a is a divisor of b
-//		// code_v4_("2 in 12").error(ls::Error::Type::VALUE_MUST_BE_A_CONTAINER, {"12"});
+//		code_v4_("var a = 20L; return a--;").equals("20");
+//		code_v4_("var a = 20L; a-- return a;").equals("19");
+//		code_v4_("var a = 20L; var b = a-- return b;").equals("20");
 //
 //		section("Number.operator =");
-//		// DISABLED_code_v4_("var a = 1m, b = 4m; a = b").equals("4");
+//		code_v4_("var a = 1L, b = 4L; a = b").equals("4");
 //
 //		section("Number.operator ==");
-//		code_v4_("return 12 == 12;").equals("true");
-//		code_v4_("return 13 == 12;").equals("false");
-//		// DISABLED_code_v4_("12m == 12m").equals("true");
-//		// DISABLED_code_v4_("13m == 12m").equals("false");
-//		code_v4_("return 12 ** 5 == 12 ** 5;").equals("true");
-//		code_v4_("return 12 ** 5 == (3 * 4) ** 5;").equals("true");
-//		code_v4_("return 12 ** 5 == 248832;").equals("true");
-//		code_v4_("return 248832 == 12 ** 5;").equals("true");
-//		// DISABLED_code_v4_("12m ** 5m == 12m ** 5m").equals("true");
-//		// DISABLED_code_v4_("12m ** 5m == (3m * 4m) ** 5m").equals("true");
-//		// DISABLED_code_v4_("12m ** 5m == 248832").equals("true");
-//		// DISABLED_code_v4_("248832 == 12m ** 5m").equals("true");
+//		code_v4_("return 12L == 12;").equals("true");
+//		code_v4_("return 12L == 12L;").equals("true");
+//		code_v4_("return 12 == 12L;").equals("true");
+//		code_v4_("return 13L == 12;").equals("false");
+//		code_v4_("return 13L == 12L;").equals("false");
+//		code_v4_("return 12L ** 5L == 12 ** 5;").equals("true");
+//		code_v4_("return 12 ** 5L == (3L * 4) ** 5;").equals("true");
+//		code_v4_("return 12L ** 5 == 248832;").equals("true");
+//		code_v4_("return 248832 == 12L ** 5L;").equals("true");
+//		code_v4_("12L ** 5L == (3L * 4L) ** 5L").equals("true");
 //
 //		section("Number.operator +");
-//		code_v4_("return 1 + 2;").equals("3");
-//		code_v4_("return 1 + (2 + 3);").equals("6");
-//		code_v4_("return (1 + 2) + 3;").equals("6");
-//		code_v4_("return (1 + 2) + (3 + 4);").equals("10");
-//		// DISABLED_code_v4_("1m + 2m").equals("3");
-//		// DISABLED_code_v4_("1m + (2m + 3m)").equals("6");
-//		// DISABLED_code_v4_("(1m + 2m) + 3m").equals("6");
-//		// DISABLED_code_v4_("(1m + 2m) + (3m + 4m)").equals("10");
-//		code_v4_("return 15 + false;").equals("15");
-//		code_v4_("return 15 + true;").equals("16");
-//		code_v4_("var a = 15 return a + true;").equals("16");
-//		// DISABLED_code_v4_("10000m + 15").equals("10015");
-//		// DISABLED_code_v4_("let a = ['a', 12321111111111111111111111111111111321321321999999] a[1] + 123456789").equals("12321111111111111111111111111111111321321445456788");
-//		code_v4_("return 10000 + (-15);").equals("9985");
-//		// DISABLED_code_v4_("10000m + (-15)").equals("9985");
-//		code_v4_("return null + 2;").equals("2");
-//		code_v4_("return 2 + null;").equals("2");
-//		code_v4_("return null + null;").equals("0");
+//		code_v4_("return 1L + 2L;").equals("3");
+//		code_v4_("return 1L + (2 + 3L);").equals("6");
+//		code_v4_("return (1 + 2) + 3L;").equals("6");
+//		code_v4_("return (1L + 2) + (3 + 4L);").equals("10");
+//		code_v4_("(1L + 2L) + (3L + 4L)").equals("10");
+//		code_v4_("return 15L + false;").equals("15");
+//		code_v4_("return 15L + true;").equals("16");
+//		code_v4_("var a = 15L return a + true;").equals("16");
+//		code_v4_("var a = ['a', 12321111111111111111111111111111111321321321999999] a[1] + 123456789").equals("12321111111111111111111111111111111321321445456788");
+//		code_v4_("return 10000L + (-15);").equals("9985");
+//		code_v4_("return 10000L + (-15L);").equals("9985");
+//		code_v4_("return null + 2L;").equals("2");
+//		code_v4_("return 2L + null;").equals("2");
 //
 //		section("Number.operator +=");
-//		code_v4_("var a = 15 a += true return a;").equals("16");
-//		// code_v4_("var a = 15$ a += []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = 15$ a += [] a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		code_v4_("var a = 10 return a += 4;").equals("14");
-//		code_v4_("var a = 10 a += 4 return a;").equals("14");
-//		code_v4_("var a = 15 return ['', a += 7];").equals("[\"\", 22]");
-//		code_v4_("var a = 10 a += 5 return a;").equals("15");
-//		code_v4_("var a = 10 a += 78 return a;").equals("88");
-//		code_v4_("var a = 10 a += (-6) return a;").equals("4");
-//		// DISABLED_code_v4_("var a = 10m return a += 4m;").equals("14");
-//		// DISABLED_code_v4_("var a = 10m a += 4m return a;").equals("14");
-//		// DISABLED_code_v4_("var a = 15 return ['', a += 7];").equals("['', 22]");
-//		// DISABLED_code_v4_("var a = 10m a += 5 return a;").equals("15");
-//		// DISABLED_code_v4_("var a = 10m a += 78m return a;").equals("88");
-//		// DISABLED_code_v4_("var a = 10m a += (-6) return a;").equals("4");
+//		code_v4_("var a = 15L a += true return a;").equals("16");
+//		code_v4_("var a = 10L return a += 4;").equals("14");
+//		code_v4_("var a = 10L a += 4 return a;").equals("14");
+//		code_v4_("var a = 15L return ['', a += 7];").equals("[\"\", 22]");
+//		code_v4_("var a = 10L a += 5 return a;").equals("15");
+//		code_v4_("var a = 10L a += 78 return a;").equals("88");
+//		code_v4_("var a = 10L a += (-6) return a;").equals("4");
 //
 //		section("Number.operator -");
-//		code_v4_("return -12").equals("-12");
-//		code_v4_("return -0").equals("0");
-//		code_v4_("return -null").equals("0");
-//		code_v4_("return 1 - 2;").equals("-1");
-//		code_v4_("return 1 - (2 - 3);").equals("2");
-//		code_v4_("return (1 - 2) - 3;").equals("-4");
-//		code_v4_("return (1 - 2) - (3 - 4);").equals("0");
-//		code_v4_("return (10 + 10) - 1;").equals("19");
-//		// DISABLED_code_v4_("return 1m - 2m;").equals("-1");
-//		// DISABLED_code_v4_("return 1m - (2m - 3m);").equals("2");
-//		// DISABLED_code_v4_("return (1m - 2m) - 3m;").equals("-4");
-//		// DISABLED_code_v4_("return (1m - 2m) - (3m - 4m);").equals("0");
-//		// DISABLED_code_v4_("return (10m + 10m) - 1").equals("19");
-//		code_v4_("return 15 - 3;").equals("12");
-//		// DISABLED_code_v4_("1000m - 12").equals("988");
-//		// DISABLED_code_v4_("1000m - (-12)").equals("1012");
-//		code_v4_("return 15 - false;").equals("15");
-//		code_v4_("return 15 - true;").equals("14");
-//		code_v4_("var a = 15 return a - true;").equals("14");
-//		// code_v4_("12$ - []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		code_v4_("var a = 100 return a - 20;").equals("80");
-//		code_v4_("return null - null;").equals("0");
-//		code_v4_("return 12 - null;").equals("12");
-//		code_v4_("return null - 12;").equals("-12");
+//		code_v4_("return -12L").equals("-12");
+//		code_v4_("return -0L").equals("0");
+//		code_v4_("return 1L - 2;").equals("-1");
+//		code_v4_("return 1L - (2 - 3);").equals("2");
+//		code_v4_("return (1L - 2) - 3;").equals("-4");
+//		code_v4_("return (1L - 2) - (3 - 4);").equals("0");
+//		code_v4_("return (10L + 10) - 1;").equals("19");
+//		code_v4_("return 15L - 3L;").equals("12");
+//		code_v4_("return 15L - false;").equals("15");
+//		code_v4_("return 15L - true;").equals("14");
+//		code_v4_("return -1512352456458153156482648564615647864561465487456418784543875L - 1;").equals("-1512352456458153156482648564615647864561465487456418784543876");
+//		code_v4_("var a = 15L return a - true;").equals("14");
+//		code_v4_("var a = 100L return a - 20;").equals("80");
+//		code_v4_("return 12L - null;").equals("12");
+//		code_v4_("return null - 12L;").equals("-12");
 //
 //		section("Number.operator -=");
-//		code_v4_("var a = 15 a -= true return a;").equals("14");
-//		// code_v4_("var a = 15$ a -= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = 15$ a -= [] a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		code_v4_("var a = 15 return ['', a -= 6];").equals("[\"\", 9]");
+//		code_v4_("var a = 15L a -= true return a;").equals("14");
+//		code_v4_("var a = 15L return ['', a -= 6];").equals("[\"\", 9]");
 //
 //		section("Number.operator *");
-//		code_v4_("return 3 * 4;").equals("12");
-//		code_v4_("return 10 + 3 * 4;").equals("22");
-//		code_v4_("return (5 + 2) * (16 * 2);").equals("224");
-//		// DISABLED_code_v4_("3m * 4m").equals("12");
-//		// DISABLED_code_v4_("10m + 3m * 4m").equals("22");
-//		// DISABLED_code_v4_("(5m + 2m) * (16m * 2m)").equals("224");
-//		code_v4_("return 12 * false;").equals("0");
-//		code_v4_("var a = 13; return a * false;").equals("0");
-//		code_v4_("return 13 * true;").equals("13");
-//		code_v4_("return 7 * 2;").equals("14");
-//		code_v4_("var a = 6; return a * 3;").equals("18");
-//		// code_v4_("14$ * []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// DISABLED_code_v4_("return 12344532132423 * 987657897613412;").equals("12192174652930109838844857276");
-//		// DISABLED_code_v4_("12344532132423m * 987657897613412m").equals("12192174652930109838844857276");
-//		// DISABLED_code_v4_("5 * 'yo'").equals("'yoyoyoyoyo'");
-//		// DISABLED_code_v4_("50m * 10").equals("500");
-//		// DISABLED_code_v4_("50 * 10m").equals("500");
-//		// DISABLED_code_v4_("let a = ['a', 12321111111111111111111111111111111321321321999999] a[1] * 123456789").equals("1521124814690000000000000000000000025951877651354934543211");
-//		code_v4_("return null * 2;").equals("0");
-//		code_v4_("return 2 * null;").equals("0");
-//		code_v4_("return null * null;").equals("0");
+//		code_v4_("return 3L * 4;").equals("12");
+//		code_v4_("return 10L + 3 * 4L;").equals("22");
+//		code_v4_("return (5L + 2L) * (16L * 2L);").equals("224");
+//		code_v4_("return 12L * false;").equals("0");
+//		code_v4_("var a = 13L; return a * false;").equals("0");
+//		code_v4_("return 13L * true;").equals("13");
+//		code_v4_("return 7L * 2;").equals("14");
+//		code_v4_("var a = 6L; return a * 3;").equals("18");
+//		code_v4_("12344532132423123456789 * 9876578976134127895615248960").equals("121921746529302415186851417222808141015896037189440");
+//		code_v4_("var a = ['a', 12321111111111111111111111111111111321321321999999] a[1] * 123456789").equals("1521124814690000000000000000000000025951877651354934543211");
+//		code_v4_("return null * 2L;").equals("0");
+//		code_v4_("return 2L * null;").equals("0");
 //
 //		section("Number.operator *=");
-//		code_v4_("var a = 15 a *= true return a;").equals("15");
-//		code_v4_("var a = 15 a *= false return a;").equals("0");
-//		code_v4_("var a = 15 a *= null return a;").equals("0");
-//		// code_v4_("var a = 15$ a *= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = 15$ a *= [] a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		code_v4_("var a = 15; return ['', a *= 2];").equals("[\"\", 30]");
-//		code_v4_("var a = 5 a *= 0 return a;").equals("0");
-//		code_v4_("var a = 5 a *= 12 return a;").equals("60");
-//		code_v4_("var a = 5 a *= 5 return a;").equals("25");
-//		code_v4_("var a = null a *= 5 return a;").equals("0");
-//		code_strict("var a = null a *= 5 return a;").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
-//		code_strict("any a = null a *= 5 return a;").equals("0");
+//		code_v4_("var a = 15L a *= true return a;").equals("15");
+//		code_v4_("var a = 15L a *= false return a;").equals("0");
+//		code_v4_("var a = 15L a *= null return a;").equals("0");
+//		code_v4_("var a = 15L; return ['', a *= 2];").equals("[\"\", 30]");
+//		code_v4_("var a = 15L; return ['', a *= 2L];").equals("[\"\", 30]");
+//		code_v4_("var a = 5 a *= 0L return a;").equals("0");
+//		code_v4_("var a = 5L a *= 12 return a;").equals("60");
+//		code_v4_("var a = 5L a *= 5L return a;").equals("25");
+//		code_v4_("var a = null a *= 5L return a;").equals("0");
+//		code_strict("var a = null a *= 5L return a;").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
+//		code_strict("any a = null a *= 5L return a;").equals("0");
 //		code_v4_("var a = null a *= null return a;").equals("0");
 //		code_strict("var a = null a *= null return a;").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
 //		code_strict("any a = null a *= null return a;").equals("0");
-//		code_v4_("var a = null return a *= 5").equals("0");
-//		code_strict("var a = null return a *= 5").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
-//		code_strict("any a = null return a *= 5").equals("0");
-//		code_v4_("var a = null return a *= null").equals("0");
-//		code_strict("var a = null return a *= null").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
-//		code_strict("any a = null return a *= null").equals("0");
-//		// DISABLED_code_v4_("var a = 5m a *= 0 a").equals("0");
-//		// DISABLED_code_v4_("var a = 5m a *= 12 a").equals("60");
-//		// DISABLED_code_v4_("var a = 5m a *= 5m a").equals("25");
-//		// DISABLED_code_v4_("var a = 91591785496891278315799124157189514175m a *= 157854689278315792457851475m a").equals("14458192840057923568549758280294876918394393505787702519557158125");
-//		// DISABLED_code_v4_("var a = 78m a *= true a").equals("78");
+//		code_v4_("var a = null return a *= 5L").equals("0");
+//		code_strict("var a = null return a *= 5L").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
+//		code_strict("any a = null return a *= 5L").equals("0");
+//		code_v4_("var a = 91591785496891278315799124157189514175L a *= 157854689278315792457851475L a").equals("14458192840057923568549758280294876918394393505787702519557158125");
+//
 //
 //		section("Number.operator **");
-//		code_v4_("return 14 ** 3;").equals("2744");
-//		code_v4_("return 14 ** null;").equals("1");
-//		code_v4_("return null ** 2;").equals("0");
-//		code_v4_("return null ** null;").equals("1");
-//		code_v4_("return 0 ** 0;").equals("1");
-//		// DISABLED_code_v4_("return 14 ** true;").equals("14");
-//		// DISABLED_code_v4_("return 14 ** false;").equals("1");
-//		// DISABLED_code_v4_("let a = 14 return a ** false;").equals("1");
-//		// code_v4_("14$ ** []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// DISABLED_code_v4_("return 2 ** 50;").equals("1.125899906842624E15");
-//		// DISABLED_code_v4_("return 2l ** 50;").equals("1125899906842624");
-//		// DISABLED_code_v4_("257l ** 20").equals("-9223372036854775808"); // overflow
-//		// DISABLED_code_v4_("257m ** 20").equals("1580019571820317063568778786121273112555213952001");
-//		// DISABLED_code_v4_("2m ** 50").equals("1125899906842624");
-//		// DISABLED_code_v4_("(5m + 2m) ** (16m * 2m)").equals("1104427674243920646305299201");
-//		// code_v4_("123m ** 1900").exception(ls::vm::Exception::NUMBER_OVERFLOW);
-//		code_v4_("var s = 0 s = 5 ** 2 return s;").equals("25");
+//		code_v4_("return 14L ** 3;").equals("2744");
+//		code_v4_("return 14L ** null;").equals("1");
+//		code_v4_("return null ** 2L;").equals("0");
+//		code_v4_("return 0L ** 0;").equals("1");
+//		code_v4_("257L ** 20").equals("1580019571820317063568778786121273112555213952001");
+//		code_v4_("2L ** 50").equals("1125899906842624");
+//		code_v4_("(5L + 2L) ** (16L * 2L)").equals("1104427674243920646305299201");
+//		code_v4_("var s = 0L s = 5L ** 2 return s;").equals("25");
 //
 //		section("Number.operator **=");
-//		code_v4_("var a = 5; a **= 4 return a").equals("625");
-//		code_v4_("var a = 5; return a **= 4").equals("625");
-//		code_v4_("var a = 5; return a **= true").equals("5");
-//		code_v4_("var a = null a **= 5 return a").equals("0");
-//		code_strict("var a = null a **= 5 return a").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
-//		code_strict("any a = null return a **= 5").equals("0");
-//		// DISABLED_code_v4_("var a = 5$; a **= false").equals("1");
-//		// code_v4_("var a = 5$; a **= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// DISABLED_code_v4_("var a = 5; ['', a **= 4]").equals("['', 625]");
+//		code_v4_("var a = 5L; a **= 4 return a").equals("625");
+//		code_v4_("var a = 5L; return a **= 4").equals("625");
+//		code_v4_("var a = 5L; return a **= true").equals("5");
+//		code_v4_("var a = null a **= 5L return a").equals("0");
+//		code_strict("var a = null a **= 5L return a").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
+//		code_strict("any a = null return a **= 5L").equals("0");
 //
 //		section("Number.operator %");
-//		code_v4_("return 721 % 57;").equals("37");
-//		code_v4_("return false % 3;").equals("0");
-//		code_v4_("return true % 3;").equals("1");
-//		code_v4_("var a = 721 return a % 57;").equals("37");
-//		code_v4_("var a = null return a % 57;").equals("0");
-//		// code_v4_("let a = 721$ a % []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// DISABLED_code_v4_("721 % true").equals("0");
-//		// code_v4_("721$ % false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// code_v4_("let a = 721$ a % false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// DISABLED_code_v4_("let a = 721$ a % true").equals("0");
-//		// DISABLED_code_v4_("123456789123456789m % 234567m").equals("221463");
-//		// DISABLED_code_v4_("(12m ** 40m) % 234567m").equals("228798");
-//		// DISABLED_code_v4_("100000m % (12m ** 3m)").equals("1504");
-//		// DISABLED_code_v4_("(100000m * 10m) % (12m ** 3m)").equals("1216");
-//		// code_v4_("['salut', 123][0] % 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// TODO should have semantic error
-//		// code_v4_("['salut', 'a'][0] % 5").error(ls::Error::NO_SUCH_OPERATOR, {});
+//		code_v4_("return 721L % 57;").equals("37");
+//		code_v4_("return false % 3L;").equals("0");
+//		code_v4_("return true % 3L;").equals("1");
+//		code_v4_("var a = 721L return a % 57L;").equals("37");
+//		code_v4_("var a = null return a % 57L;").equals("0");
+//		code_v4_("123456789123456789L % 234567L").equals("221463");
+//		code_v4_("(12L ** 40L) % 234567L").equals("228798");
+//		code_v4_("100000L % (12L ** 3L)").equals("1504");
+//		code_v4_("(100000L * 10L) % (12L ** 3L)").equals("1216");
 //
 //		section("Number.operator %=");
-//		code_v4_("var a = 721 return a %= 17;").equals("7");
-//		// DISABLED_code_v4_("var a = 721 a %= true").equals("0");
-//		// code_v4_("var a = 721$ a %= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//
-//		// section("Number.operator %%");
-//		// DISABLED_code_v4_("0 %% 1").equals("0");
-//		// DISABLED_code_v4_("2 %% 5").equals("2");
-//		// DISABLED_code_v4_("(-2) %% 5").equals("3");
-//		// DISABLED_code_v4_("(-12) %% 5").equals("3");
-//		// DISABLED_code_v4_("721 %% 57").equals("37");
-//		// DISABLED_code_v4_("(-721) %% 57").equals("20");
-//		// DISABLED_code_v4_("(-721$) %% 57$").equals("20");
-//
-//		// section("Number.operator %%=");
-//		// DISABLED_code_v4_("var a = 0 a %%= 1").equals("0");
-//		// DISABLED_code_v4_("var a = 2 a %%= 5").equals("2");
-//		// DISABLED_code_v4_("var a = -2 a %%= 5").equals("3");
-//		// DISABLED_code_v4_("var a = -12 a %%= 5").equals("3");
-//		// DISABLED_code_v4_("var a = 721 a %%= 57").equals("37");
-//		// DISABLED_code_v4_("var a = -721 a %%= 57").equals("20");
-//		// DISABLED_code_v4_("var a = -721$ a %%= 57$").equals("20");
+//		code_v4_("var a = 721L return a %= 17;").equals("7");
 //
 //		section("Number.operator /");
-//		code_v4_("8 / 0").equals("null");
-//		code_v4_("8 / 0").equals("∞");
-//		code_v4_("8 / null").equals("null");
-//		code_v4_("8 / null").equals("∞");
-//		code_v4_("null / 5").equals("0");
-//		code_v4_("null / 5").equals("0.0");
-//		// code_v4_("12$ / false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// code_v4_("let a = 13$; a / false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		code_v4_("return 13 / true;").equals("13");
-//		code_v4_("return 13 / true;").equals("13.0");
-//		code_v4_("return 14 / 2;").equals("7");
-//		code_v4_("return 14 / 2;").equals("7.0");
-//		code_v4_("var a = 18; return a / 3;").equals("6");
-//		code_v4_("var a = 18; return a / 3;").equals("6.0");
-//		// code_v4_("14$ / []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		code_v4_("var a = 17, b = 5 return a / b;").equals("3,4");
-//		code_v4_("var a = 17, b = 5 return a / b;").equals("3.4");
+////		code_v4_("8L / 0").equals("null");	// cast error with division by 0
+////		code_v4_("8L / 0L").equals("∞");
+////		code_v4_("8L / null").equals("null");
+////		code_v4_("8L / null").equals("∞");
+//		code_v4_("null / 5L").equals("0");
+//		code_v4_("return 13L / true;").equals("13");
+//		code_v4_("return 14L / 2;").equals("7");
+//		code_v4_("var a = 18L; return a / 3;").equals("6");
+//		code_v4_("var a = 18; return a / 3L;").equals("6");
+//		code_v4_("var a = 17L, b = 5L return a / b;").equals("3");
+//		code_v4_("var a = 17, b = 5L return a / b;").equals("3");
 //
 //		section("Number.operator /=");
-//		code_v4_("var a = 12 a /= 3 return a;").equals("4");
-//		code_v4_("var a = 12 a /= 3 return a;").equals("4.0");
-//		code_strict("var a = 12 a /= 3 return a;").equals("4");
-//		code_strict_v1("any a = 12 a /= 3 return a;").equals("4");
-//		code_strict_v2_("any a = 12 a /= 3 return a;").equals("4.0");
-//		code_v4_("var a = 12 a /= 0.5 return a;").equals("24");
-//		code_v4_("var a = 12 a /= 0.5 return a;").equals("24.0");
-//		code_strict("var a = 12 a /= 0.5 return a;").equals("24");
-//		code_v4_("var a = 12 a /= true return a;").equals("12");
-//		code_v4_("var a = 12 a /= true return a;").equals("12.0");
-//		code_strict("var a = 12 a /= true return a;").equals("12");
-//		code_v4_("var a = null a /= 5 return a;").equals("0");
-//		code_v4_("var a = null a /= 5 return a;").equals("0.0");
-//		// code_v4_("var a = 12 a /= false return a;").equals("nan");
-//		// code_v4_("var a = 12$ a /= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = 12$ a /= [] a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		code_v4_("var a = 15; return ['', a /= 2];").equals("[\"\", 7,5]");
-//		code_v4_("var a = 15; return ['', a /= 2];").equals("[\"\", 7.5]");
-//		code_strict_v2_("var a = 15; return ['', a /= 2];").equals("[\"\", 7]");
-//		code_strict_v2_("any a = 15; return ['', a /= 2];").equals("[\"\", 7.5]");
+//		code_v4_("var a = 12L a /= 3 return a;").equals("4");
+//		code_v4_("var a = 12 a /= 3L return a;").equals("4");
+//		code_strict("var a = 12L a /= 3 return a;").equals("4");
+//		code_v4_("var a = 12L a /= true return a;").equals("12");
+//		code_strict("var a = 12L a /= true return a;").equals("12");
+//		code_v4_("var a = null a /= 5L return a;").equals("0");
+//		code_v4_("var a = 15L; return ['', a /= 2];").equals("[\"\", 7]");
+//		code_v4_("var a = 15; return ['', a /= 2L];").equals("[\"\", 7]");
 //
 //		section("Number.operator <");
-//		code_v4_("return 5 < 2;").equals("false");
-//		code_v4_("return 2 < 5;").equals("true");
-//		code_v4_("return 5.1 < 2.1;").equals("false");
-//		code_v4_("return 2.1 < 5.1;").equals("true");
-//		// code_v4_("3m < 4m").equals("true");
-//		// code_v4_("10m < (3m * 4m)").equals("true");
-//		// code_v4_("(5m + 5m) < (3m * 4m)").equals("true");
-//		// code_v4_("(5m + 5m) < 12m").equals("true");
-//		// code_v4_("3m < 4").equals("true");
+//		code_v4_("return 5L < 2;").equals("false");
+//		code_v4_("return 2 < 5L;").equals("true");
+//		code_v4_("return 5.1 < 2L;").equals("false");
+//		code_v4_("return 2L < 5.1;").equals("true");
+//		code_v4_("3L < 4L").equals("true");
+//		code_v4_("10L < (3L * 4L)").equals("true");
+//		code_v4_("(5L + 5L) < (3L * 4L)").equals("true");
+//		code_v4_("(5L + 5L) < 12L").equals("true");
+//		code_v4_("3L < 4").equals("true");
+//		code_v4_("return 3 < [];").equals("false");
+//		code_v4_("return true < [];").equals("false");
 //
 //		section("Number.operator <=");
-//		code_v4_("return 5 <= 2;").equals("false");
-//		code_v4_("return 2 <= 5;").equals("true");
-//		code_v4_("return 5.1 <= 2.1;").equals("false");
-//		code_v4_("return 2.1 <= 5.1;").equals("true");
-//		code_v4_("return 3 <= 4;").equals("true");
+//		code_v4_("return 5L <= 2;").equals("false");
+//		code_v4_("return 2 <= 5L;").equals("true");
+//		code_v4_("return 5.1 <= 2L;").equals("false");
+//		code_v4_("return 2L <= 5.1;").equals("true");
+//		code_v4_("return 5.1 <= 5L;").equals("false");
+//		code_v4_("return 5L <= 5.1;").equals("true");
+//		code_v4_("3L <= 4L").equals("true");
+//		code_v4_("10L <= (3L * 4L)").equals("true");
+//		code_v4_("(5L + 5L) <= (3L * 4L)").equals("true");
+//		code_v4_("(5L + 5L) <= 12L").equals("true");
+//		code_v4_("3L <= 4").equals("true");
 //		code_v4_("return 3 <= [];").equals("false");
+//		code_v4_("return true <= [];").equals("false");
 //
 //		section("Number.operator >");
-//		code_v4_("return 5 > 2;").equals("true");
-//		code_v4_("return 2 > 5;").equals("false");
-//		code_v4_("return 5.1 > 2.1;").equals("true");
-//		code_v4_("return 2.1 > 5.1;").equals("false");
-//		// code_v4_("12 > 5m").equals("true");
-//		code_v4_("return [] > true;").equals("false");
-//		// code_v4_("-100m > 0").equals("false");
+//		code_v4_("return 5L > 2;").equals("true");
+//		code_v4_("return 2 > 5L;").equals("false");
+//		code_v4_("return 5.1 > 2L;").equals("true");
+//		code_v4_("return 2L > 5.1;").equals("false");
+//		code_v4_("3L > 4L").equals("false");
+//		code_v4_("10L > (3L * 4L)").equals("false");
+//		code_v4_("(5L + 5L) > (3L * 4L)").equals("false");
+//		code_v4_("(5L + 5L) > 12L").equals("false");
+//		code_v4_("3L > 4").equals("false");
+//		code_v4_("return 3 > [];").equals("true");
+//		code_v4_("return true > [];").equals("true");
 //
 //		section("Number.operator >=");
-//		code_v4_("return 5 >= 2;").equals("true");
-//		code_v4_("return 2 >= 5;").equals("false");
-//		code_v4_("return 5.1 >= 2.1;").equals("true");
-//		code_v4_("return 2.1 >= 5.1;").equals("false");
+//		code_v4_("return 5L >= 2;").equals("true");
+//		code_v4_("return 2 >= 5L;").equals("false");
+//		code_v4_("return 5.1 >= 2L;").equals("true");
+//		code_v4_("return 2L >= 5.1;").equals("false");
+//		code_v4_("return 5.1 >= 5L;").equals("true");
+//		code_v4_("return 5L >= 5.1;").equals("false");
+//		code_v4_("3L >= 4L").equals("false");
+//		code_v4_("10L >= (3L * 4L)").equals("false");
+//		code_v4_("(5L + 5L) >= (3L * 4L)").equals("false");
+//		code_v4_("(5L + 5L) >= 12L").equals("false");
+//		code_v4_("3L >= 4").equals("false");
+//		code_v4_("return 3 >= [];").equals("true");
+//		code_v4_("return true >= [];").equals("true");
 //
-//		// section("Number.operator \\");
-//		// code_v4_("10 \\ 2").equals("5");
-//		// code_v4_("10 \\ 4").equals("2");
-//		// code_v4_("2432431 \\ 2313").equals("1051");
-//		// code_v4_("let a = 420987$ a \\ 546$").equals("771");
-//		// code_v4_("420987$ \\ 12").equals("35082");
-//		// code_v4_("12345678912345l \\ 1234").equals("10004602035");
-//		// code_v4_("12$ \\ false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// code_v4_("let a = 13$; a \\ false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// code_v4_("13$ \\ true").equals("13");
-//		// code_v4_("17$ \\ 4").equals("4");
-//		// code_v4_("let a = 10.7$; a \\ true").equals("10");
-//		// code_v4_("let a = 10$; a \\ 4").equals("2");
-//		// code_v4_("14$ \\ []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("67.89$ \\ 1").equals("67");
-//		// code_v4_("['', 10 \\ 2]").equals("['', 5]");
-//		// code_v4_("['', 10$ \\ 2]").equals("['', 5]");
+//		 section("Number.operator \\");
+//		 code_v4_("10L \\ 2").equals("5");
+//		 code_v4_("10 \\ 4L").equals("2");
+//		 code_v4_("2432431L \\ 2313").equals("1051");
+//		 code_v4_("var a = 420987 a \\ 546L").equals("771");
+//		 code_v4_("420987L \\ 12").equals("35082");
+//		 code_v4_("12345678912345L \\ 1234").equals("10004602035");
+////		 code_v4_("12L \\ false").equals("null");
+////		 code_v4_("var a = 13L; a \\ false").exception(ls::vm::Exception::DIVISION_BY_ZERO);
+//		 code_v4_("13L \\ true").equals("13");
+//		 code_v4_("17 \\ 4L").equals("4");
+//		 code_v4_("var a = 10L; a \\ true").equals("10");
+//		 code_v4_("var a = 10; a \\ 4L").equals("2");
+////		 code_v4_("14L \\ []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
+//		 code_v4_("67.89 \\ 1L").equals("67");
+//		 code_v4_("['', 10L \\ 2]").equals("[\"\", 5]");
+//		 code_v4_("['', 10 \\ 2L]").equals("[\"\", 5]");
 //
-//		// section("Number.operator \\=");
-//		// code_v4_("var a = 12 a \\= 5").equals("2");
-//		// code_v4_("var a = 12$ a \\= 5").equals("2");
-//		// code_v4_("var a = 30$ a \\= 4 a").equals("7");
-//		// code_v4_("var a = 12$ a \\= true a").equals("12");
-//		// code_v4_("var a = 12$ a \\= false a").exception(ls::vm::Exception::DIVISION_BY_ZERO);
-//		// code_v4_("var a = 12$ a \\= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = 12$ a \\= [] a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = 12 ['', a \\= 5]").equals("['', 2]");
+//		 section("Number.operator \\=");
+//		 code_v4_("var a = 12 a \\= 5L").equals("2");
+//		 code_v4_("var a = 12L a \\= 5").equals("2");
+//		 code_v4_("var a = 30L a \\= 4 a").equals("7");
+//		 code_v4_("var a = 12L a \\= true a").equals("12");
+////		 code_v4_("var a = 12L a \\= false a").exception(ls::vm::Exception::DIVISION_BY_ZERO);
+////		 code_v4_("var a = 12L a \\= []").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
+////		 code_v4_("var a = 12L a \\= [] a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
+//		 code_v4_("var a = 12L return ['', a \\= 5]").equals("[\"\", 2]");
+//		 code_v4_("var a = 12 return ['', a \\= 5L]").equals("[\"\", 2]");
 //
 //		section("Number.operator &");
-//		code_v4_("return 0 & 0;").equals("0");
-//		code_v4_("return 1 & 0;").equals("0");
-//		code_v4_("return 1 & 1;").equals("1");
-//		code_v4_("return 5 & 12;").equals("4");
-//		code_v4_("return 87619 & 18431;").equals("17987");
-//		code_v4_("return 87619 & [18431, ''][0];").equals("17987");
-//		code_v4_("var a = 87619 return a &= 18431;").equals("17987");
-//		code_v4_("var a = 87619 a &= 18431 return a;").equals("17987");
-//		code_v4_("return 87619 & 18431;").equals("17987");
-//		// code_v4_("87619$ &= 18431").error(ls::Error::VALUE_MUST_BE_A_LVALUE, {"87619"});
-//		code_v4_("var a = 87619 a &= 18431 return a;").equals("17987");
-//		// code_v4_("[12, 'hello'][1] & 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//		// code_v4_("var a = [12, 'hello'][1] a &= 18431 a").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
+//		code_v4_("return 0L & 0L;").equals("0");
+//		code_v4_("return 1L & 0;").equals("0");
+//		code_v4_("return 1 & 1L;").equals("1");
+//		code_v4_("return 5L & 12L;").equals("4");
+//		code_v4_("return 87619L & 18431L;").equals("17987");
+//		code_v4_("return 87619 & [18431L, ''][0];").equals("17987");
+//		code_v4_("var a = 87619L return a &= 18431;").equals("17987");
+//		code_v4_("var a = 87619 a &= 18431L return a;").equals("17987");
 //
 //		section("Number.operator |");
-//		code_v4_("return 0 | 0;").equals("0");
-//		code_v4_("return 1 | 0;").equals("1");
-//		code_v4_("return 1 | 1;").equals("1");
-//		code_v4_("return 5 | 12;").equals("13");
-//		code_v4_("return [5, ''][0] | [12, ''][0];").equals("13");
-//		code_v4_("return 87619 | 18431;").equals("88063");
-//		code_v4_("var a = 87619 return a |= 18431;").equals("88063");
-//		code_v4_("var a = 87619 a |= 18431 return a;").equals("88063");
-//		code_v4_("return [87619, ''][0] | 18431;").equals("88063");
+//		code_v4_("return 0L | 0;").equals("0");
+//		code_v4_("return 1 | 0L;").equals("1");
+//		code_v4_("return 1L | 1L;").equals("1");
+//		code_v4_("return 5L | 12L;").equals("13");
+//		code_v4_("return [5L, ''][0] | [12, ''][0];").equals("13");
+//		code_v4_("return 8945486153454615485641315461564815387619L | 18431145645456165789L;").equals("8945486153454615485649025782518292884479");
+//		code_v4_("var a = 87619L return a |= 18431;").equals("88063");
+//		code_v4_("var a = 87619 a |= 18431L return a;").equals("88063");
+//		code_v4_("return [87619, ''][0] | 18431L;").equals("88063");
 //		// code_v4_("87619$ |= 18431").error(ls::Error::VALUE_MUST_BE_A_LVALUE, {"87619"});
-//		code_v4_("var a = 87619 a |= 18431 return a;").equals("88063");
+//		code_v4_("var a = 87619L a |= 18431L return a;").equals("88063");
 //		// code_v4_("[12, 'hello'][1] | 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
 //
 //		section("Number.operator ^");
-//		code_v4_("return 0 ^ 0;").equals("0");
-//		code_v4_("return 1 ^ 0;").equals("1");
-//		code_v4_("return 1 ^ 1;").equals("0");
-//		code_v4_("return 5 ^ 12;").equals("9");
-//		code_v4_("return 87619 ^ 18431;").equals("70076");
-//		code_v4_("return [87619, ''][0] ^ [18431, ''][0];").equals("70076");
-//		code_v4_("var a = 5 a ^= 2 return a;").equals("25"); // In LS 1.0, ^= was power equals
-//		code_v4_("var a = 87619 return a ^= 18431;").equals("70076");
-//		code_v4_("var a = 87619 a ^= 18431 return a;").equals("70076");
-//		code_v4_("return [87619, ''][0] ^ 18431;").equals("70076");
+//		code_v4_("return 0L ^ 0;").equals("0");
+//		code_v4_("return 1 ^ 0L;").equals("1");
+//		code_v4_("return 1L ^ 1L;").equals("0");
+//		code_v4_("return 5L ^ 12;").equals("9");
+//		code_v4_("return 871786947865784697168619L ^ 1844789165478467831L;").equals("871787638605965079771676");
+//		code_v4_("return [87619L, ''][0] ^ [18431L, ''][0];").equals("70076");
+//		code_v4_("var a = 5L a ^= 2 return a;").equals("7");
+//		code_v4_("var a = 87619 return a ^= 18431L;").equals("70076");
+//		code_v4_("var a = 87619L a ^= 18431L return a;").equals("70076");
+//		code_v4_("return [87619L, ''][0] ^ 18431L;").equals("70076");
 //		// code_v4_("87619$ ^= 18431").error(ls::Error::VALUE_MUST_BE_A_LVALUE, {"87619"});
-//		code_v4_("var a = 87619 a ^= 18431 return a;").equals("70076");
+//		code_v4_("var a = 87619L a ^= 18431L return a;").equals("70076");
 //		// code_v4_("[12, 'hello'][1] ^ 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//
-//		section("Number.operator <<");
-//		code_v4_("return 0 << 0;").equals("0");
-//		code_v4_("return 1 << 0;").equals("1");
-//		code_v4_("return 123456 << 0;").equals("123456");
-//		code_v4_("return 0 << 1;").equals("0");
-//		code_v4_("return 0 << 12;").equals("0");
-//		code_v4_("return 1 << 8;").equals("256");
-//		code_v4_("return 123 << 12;").equals("503808");
-//		code_v4_("return [123, ''][0] << 12;").equals("503808");
-//		code_v4_("var a = 123 return a <<= 11;").equals("251904");
-//		code_v4_("var a = 123 a <<= 13 return a;").equals("1007616");
-//		code_v4_("var a = [123, ''] return a[0] <<= 13;").equals("1007616");
-//		code_v4_("var a = 123 return ['', a <<= 13];").equals("[\"\", 1007616]");
-//		// code_v4_("'salut' << 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-//
+
+		section("Number.operator <<");
+//		code_v4_("return 0L << 0;").equals("0");
+//		code_v4_("return 1L << 0;").equals("1");
+//		code_v4_("return 123456L << 0;").equals("123456");
+//		code_v4_("return 0L << 1;").equals("0");
+//		code_v4_("return 0L << 12;").equals("0");
+//		code_v4_("return 1L << 8;").equals("256");
+//		code_v4_("return 123L << 121;").equals("326990086963089304734336536828964765696");
+//		code_v4_("return [123L, ''][0] << 12;").equals("503808");
+//		code_v4_("var a = 123L return a <<= 11;").equals("251904");
+		code_v4_("big_integer a = 123L return a << 11;").equals("251904");
+		// TODO cast to BigIntegerValue or add another shl function
+		code_v4_("big_integer a = 123L return a <<= 11;").equals("251904");
+		code_v4_("big_integer a = 123L a <<= 13 return a;").equals("1007616");
+		code_v4_("big_integer a = 123 a <<= 13 return a;").equals("1007616");
+//		code_v4_("var a = [123L, ''] return a[0] <<= 13;").equals("1007616");
+//		code_v4_("var a = 123L return ['', a <<= 13];").equals("[\"\", 1007616]");
+		// code_v4_("'salut' << 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
+
 //		section("Number.operator >>");
 //		code_v4_("return 0 >> 0;").equals("0");
 //		code_v4_("return 1 >> 0;").equals("1");
@@ -733,7 +736,7 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("var a = [123123123, ''] return a[0] >>= 7;").equals("961899");
 //		code_v4_("var a = 12345 return ['', a >>= 8];").equals("[\"\", 48]");
 //		// code_v4_("'salut' >> 5").error(ls::Error::NO_SUCH_OPERATOR, {env.tmp_string->to_string(), ">>", env.integer->to_string()});
-//
+
 //		section("Number.operator >>>");
 //		code_v4_("return 155 >>> 3;").equals("19");
 //		code_v4_("return -155 >>> 3;").equals("2305843009213693932");
@@ -1686,9 +1689,12 @@ public class TestBigInt extends TestCommon {
 //		code_strict_v1("var a = 5.5 return a = 2").equals("2");
 //		code_strict_v2_("var a = 5.5 return a = 2").equals("2.0");
 		// code_v4_("var a = 5.5 a = 1000m").equals("1000");
-		// code_v4_("var a = 5.5 a = 2m ** 100").equals("1267650600228229401496703205376");
+		// code_v4_("var a = 5.5 a = 2m **
+		// 100").equals("1267650600228229401496703205376");
 		// code_v4_("var a = 2m return a = 5").equals("5");
-		// code_v4_("var a = 5.5 System.print(a) a = 2 System.print(a) a = 200l System.print(a) a = 1000m System.print(a) a = 'hello' System.print(a)").output("5.5\n2\n200\n1000\nhello\n");
+		// code_v4_("var a = 5.5 System.print(a) a = 2 System.print(a) a = 200l
+		// System.print(a) a = 1000m System.print(a) a = 'hello'
+		// System.print(a)").output("5.5\n2\n200\n1000\nhello\n");
 		// code_v4_("var a = [] a = 5m").equals("5");
 
 		// section("Value.copy()");

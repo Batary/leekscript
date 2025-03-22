@@ -257,7 +257,7 @@ public class LeekFunctionCall extends Expression {
 					writer.addCode("0l");
 					addFinalParenthesis = false;
 				} else if (cvt.getClassDeclaration().getName() == "BigInteger") {
-					writer.addCode("BigIntegerValue.ZERO");
+					writer.addCode("new BigIntegerValue(" + writer.getAIThis() + ", 0)");
 					addFinalParenthesis = false;
 				} else if (cvt.getClassDeclaration().getName() == "Real" || cvt.getClassDeclaration().getName() == "Number") {
 					writer.addCode("0.0");

@@ -2,6 +2,8 @@ package leekscript.runner.values;
 
 import leekscript.runner.values.BigIntegerValue;
 
+import java.math.BigInteger;
+
 import leekscript.AILog;
 import leekscript.runner.AI;
 import leekscript.runner.LeekOperations;
@@ -85,7 +87,7 @@ public class Box<T> {
 		}
 		if (mValue instanceof BigIntegerValue) {
 			var value = (BigIntegerValue) mValue;
-			mValue = value.add(BigIntegerValue.ONE);
+			mValue = value.add(new BigIntegerValue(mUAI, BigInteger.ONE));
 			return (T) value;
 		}
 		if (mValue instanceof Double) {
@@ -105,7 +107,7 @@ public class Box<T> {
 		}
 		if (mValue instanceof BigIntegerValue) {
 			var value = (BigIntegerValue) mValue;
-			mValue = value.subtract(BigIntegerValue.ONE);
+			mValue = value.subtract(new BigIntegerValue(mUAI, BigInteger.ONE));
 			return (T) value;
 		}
 		if (mValue instanceof Double) {
@@ -122,7 +124,7 @@ public class Box<T> {
 			return (T) (mValue = (Long) mValue + 1);
 		}
 		if (mValue instanceof BigIntegerValue) {
-			return (T) (mValue = ((BigIntegerValue) mValue).add(BigIntegerValue.ONE));
+			return (T) (mValue = ((BigIntegerValue) mValue).add(new BigIntegerValue(mUAI, BigInteger.ONE)));
 		}
 		if (mValue instanceof Double) {
 			return (T) (mValue = (Double) mValue + 1);
@@ -136,7 +138,7 @@ public class Box<T> {
 			return (T) (mValue = (Long) mValue - 1);
 		}
 		if (mValue instanceof BigIntegerValue) {
-			return (T) (mValue = ((BigIntegerValue) mValue).subtract(BigIntegerValue.ONE));
+			return (T) (mValue = ((BigIntegerValue) mValue).subtract(new BigIntegerValue(mUAI, BigInteger.ONE)));
 		}
 		if (mValue instanceof Double) {
 			return (T) (mValue = (Double) mValue - 1);

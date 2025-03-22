@@ -198,20 +198,20 @@ public class JavaWriter {
 	public void compileConvert(MainLeekBlock mainblock, int index, Expression value, Type type) {
 
 		 System.out.println("convert " + value.getType().getJavaName(4) + " to " + type.getJavaName(4));
-		if (type == Type.REAL && value.getType().isNumber()) {
+		if (type == Type.REAL && value.getType().isCompoundNumber()) {
 			addCode("(");
 			value.writeJavaCode(mainblock, this);
 			addCode(").doubleValue()");
 			return;
 		}
-		if (type == Type.INT && value.getType().isNumber()) {
+		if (type == Type.INT && value.getType().isCompoundNumber()) {
 			addCode("(");
 			value.writeJavaCode(mainblock, this);
 			addCode(").longValue()");
 			return;
 		}
 		if (type == Type.BIG_INT && value.getType().isNumber()) {
-			addCode("BigIntegerValue.valueOf(");
+			addCode("BigIntegerValue.valueOf(" + getAIThis() + ", ");
 			value.writeJavaCode(mainblock, this);
 			addCode(")");
 			return;
@@ -287,7 +287,7 @@ public class JavaWriter {
 								return;
 							}
 							if (t == Type.BIG_INT && value.getType().isNumber()) { // int/double -> bigint
-								addCode("(BigIntegerValue.valueOf(");
+								addCode("(BigIntegerValue.valueOf(" + getAIThis() + ", ");
 								value.writeJavaCode(mainblock, this);
 								addCode("))");
 								return;
@@ -469,7 +469,7 @@ public class JavaWriter {
 			if (ct.getTypes().size() == 2 && ct.getTypes().stream().anyMatch(t -> t == Type.NULL)) {
 				for (var t : ct.getTypes()) {
 					if (t != Type.NULL) {
-						if (t == Type.BIG_INT) return "BigIntegerValue.valueOf(" + v + ")";
+						if (t == Type.BIG_INT) return "BigIntegerValue.valueOf(" + getAIThis() + ", " + v + ")";
 						if (t == Type.INT) return "(Long) " + v;
 						if (t == Type.REAL) return "(Double) " + v;
 						if (t == Type.BOOL) return "(Boolean) " + v;

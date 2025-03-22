@@ -48,7 +48,7 @@ public class TestMain {
 //		new TestSystem().run();
 //		new TestJSON().run();
 //		new TestOperations().run();
-//		new TestFiles().run();
+		new TestFiles().run();
 //		new TestEuler().run();
 
 		// TestCommon.ouputOperationsFile();

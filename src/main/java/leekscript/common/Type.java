@@ -465,10 +465,26 @@ public class Type {
 		if (type instanceof CompoundType ct) {
 			return Type.compound(ct.getTypes().stream().map(t -> this.div(t)).collect(Collectors.toCollection(HashSet::new)));
 		}
-
+		if (this == Type.BIG_INT && type == Type.NULL) return Type.REAL;
 		if (this == Type.BIG_INT && (type.isNumber() || type == Type.BOOL) 
 				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.BIG_INT;
 		if ((this.isNumber() || this == Type.BOOL) && (type.isNumber() || type == Type.BOOL)) return Type.REAL;
+
+		return Type.ANY;
+	}
+	
+	public Type intdiv(Type type) {
+
+		if (this instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> t.intdiv(type)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		if (type instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> this.intdiv(t)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		if (this == Type.BIG_INT && type == Type.NULL) return Type.REAL;
+		if (this == Type.BIG_INT && (type.isNumber() || type == Type.BOOL) 
+				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.BIG_INT;
+		if ((this.isNumber() || this == Type.BOOL) && (type.isNumber() || type == Type.BOOL)) return Type.INT;
 
 		return Type.ANY;
 	}
@@ -488,6 +504,20 @@ public class Type {
 		if ((this.isNumber() || this == Type.BOOL || this == Type.NULL) && (type.isNumber() || type == Type.BOOL || type == Type.NULL)) return Type.REAL;
 
 		return Type.ANY;
+	}
+	
+	public Type binop(Type type) {
+		if (this instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> t.binop(type)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		if (type instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> this.binop(t)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		
+		if (this == Type.BIG_INT || type == Type.BIG_INT) {
+			return Type.BIG_INT;
+		}
+		return Type.INT;
 	}
 
 	public boolean isWarning() {
@@ -525,7 +555,7 @@ public class Type {
 		return name;
 	}
 
-	public boolean isIntOrReal() {
+	public boolean isCompoundNumber() {
 		return false;
 	}
 

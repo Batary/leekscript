@@ -134,7 +134,7 @@ public class LeekVariable extends Expression {
 
 	@Override
 	public void preAnalyze(WordCompiler compiler) throws LeekCompilerException {
-		System.out.println(token.getWord());
+//		System.out.println(token.getWord());
 		if (this.type == VariableType.SUPER) {
 			return; // Déjà OK
 		}

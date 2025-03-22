@@ -695,7 +695,13 @@ public abstract class AI {
 		// ops(1);
 		if (x == null) return y == null;
 		if (x instanceof Number) {
-			if (x instanceof BigIntegerValue || y instanceof BigIntegerValue) return bigint(x).equals(bigint(y));
+			if (x instanceof BigIntegerValue || y instanceof BigIntegerValue) {
+				if (x instanceof Double && (((Double) x).isNaN() || ((Double) x).isInfinite())
+					|| y instanceof Double && (((Double) y).isNaN() || ((Double) y).isInfinite())) {
+					return false;
+				}
+				return bigint(x).equals(bigint(y));
+			}
 			var n = ((Number) x).doubleValue();
 			if (y instanceof Number) {
 				return n == ((Number) y).doubleValue();
@@ -719,7 +725,7 @@ public abstract class AI {
 				} else if (x instanceof BigIntegerValue) {
 					try {
 						ops(((String) y).length());
-						return x.equals(new BigIntegerValue((String) y));
+						return x.equals(BigIntegerValue.valueOf(this, (String) y));
 					} catch (Exception e) {
 						return false;
 					}
@@ -784,7 +790,7 @@ public abstract class AI {
 				ops(s.length());
 				if (y instanceof BigIntegerValue) {
 					try {
-						return y.equals(new BigIntegerValue(s));
+						return y.equals(BigIntegerValue.valueOf(this, s));
 					} catch (Exception e) {
 						return false;
 					}
@@ -837,11 +843,11 @@ public abstract class AI {
 					return ((BigIntegerValue) x).compareTo((BigIntegerValue) y) < 0;
 				}
 				if (y instanceof Long) {
-					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf((Long) y)) < 0;
+					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf(this, (Long) y)) < 0;
 				}
 			} else if (y instanceof BigIntegerValue) {
 				if (x instanceof Long) {
-					return BigIntegerValue.valueOf((Long) x).compareTo((BigIntegerValue) y) < 0;
+					return BigIntegerValue.valueOf(this, (Long) x).compareTo((BigIntegerValue) y) < 0;
 				}
 			}
 			return ((Number) x).doubleValue() < ((Number) y).doubleValue();
@@ -859,11 +865,11 @@ public abstract class AI {
 					return ((BigIntegerValue) x).compareTo((BigIntegerValue) y) > 0;
 				}
 				if (y instanceof Long) {
-					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf((Long) y)) > 0;
+					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf(this, (Long) y)) > 0;
 				}
 			} else if (y instanceof BigIntegerValue) {
 				if (x instanceof Long) {
-					return BigIntegerValue.valueOf((Long) x).compareTo((BigIntegerValue) y) > 0;
+					return BigIntegerValue.valueOf(this, (Long) x).compareTo((BigIntegerValue) y) > 0;
 				}
 			}
 			return ((Number) x).doubleValue() > ((Number) y).doubleValue();
@@ -881,11 +887,11 @@ public abstract class AI {
 					return ((BigIntegerValue) x).compareTo((BigIntegerValue) y) <= 0;
 				}
 				if (y instanceof Long) {
-					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf((Long) y)) <= 0;
+					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf(this, (Long) y)) <= 0;
 				}
 			} else if (y instanceof BigIntegerValue) {
 				if (x instanceof Long) {
-					return BigIntegerValue.valueOf((Long) x).compareTo((BigIntegerValue) y) <= 0;
+					return BigIntegerValue.valueOf(this, (Long) x).compareTo((BigIntegerValue) y) <= 0;
 				}
 			}
 			return ((Number) x).doubleValue() <= ((Number) y).doubleValue();
@@ -903,11 +909,11 @@ public abstract class AI {
 					return ((BigIntegerValue) x).compareTo((BigIntegerValue) y) >= 0;
 				}
 				if (y instanceof Long) {
-					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf((Long) y)) >= 0;
+					return ((BigIntegerValue) x).compareTo(BigIntegerValue.valueOf(this, (Long) y)) >= 0;
 				}
 			} else if (y instanceof BigIntegerValue) {
 				if (x instanceof Long) {
-					return BigIntegerValue.valueOf((Long) x).compareTo((BigIntegerValue) y) >= 0;
+					return BigIntegerValue.valueOf(this, (Long) x).compareTo((BigIntegerValue) y) >= 0;
 				}
 			}
 			return ((Number) x).doubleValue() >= ((Number) y).doubleValue();
@@ -921,7 +927,7 @@ public abstract class AI {
 		} else if (value instanceof Long) {
 			return (Long) value != 0;
 		} else if (value instanceof BigIntegerValue) {
-			return !((BigIntegerValue) value).equals(BigIntegerValue.ZERO);
+			return !((BigIntegerValue) value).isZero();
 		} else if (value instanceof Boolean) {
 			return (Boolean) value;
 		} else if (value instanceof ObjectLeekValue) {
@@ -1088,44 +1094,44 @@ public abstract class AI {
 	
 	public BigIntegerValue bigint(Object value) throws LeekRunException {
 		if (value instanceof Double) {
-			return BigIntegerValue.valueOf((long) (double) value);
+			return BigIntegerValue.valueOf(this, (long) (double) value);
 		} else if (value instanceof Long) {
-			return BigIntegerValue.valueOf((Long) value);
+			return BigIntegerValue.valueOf(this, (Long) value);
 		} else if (value instanceof BigIntegerValue) {
 			return (BigIntegerValue) value;
 		} else if (value instanceof Boolean) {
-			return ((Boolean) value) ? BigIntegerValue.ONE : BigIntegerValue.ZERO;
+			return ((Boolean) value) ? BigIntegerValue.valueOf(this, 1) : BigIntegerValue.valueOf(this, 0);
 		} else if (value instanceof ObjectLeekValue) {
-			return BigIntegerValue.valueOf(((ObjectLeekValue) value).size());
+			return BigIntegerValue.valueOf(this, ((ObjectLeekValue) value).size());
 		} else if (value instanceof NativeObjectLeekValue o) {
-			return BigIntegerValue.valueOf(o.size());
+			return BigIntegerValue.valueOf(this, o.size());
 		} else if (value instanceof LegacyArrayLeekValue) {
-			return BigIntegerValue.valueOf(((LegacyArrayLeekValue) value).size());
+			return BigIntegerValue.valueOf(this, ((LegacyArrayLeekValue) value).size());
 		} else if (value instanceof ArrayLeekValue) {
-			return BigIntegerValue.valueOf(((ArrayLeekValue) value).size());
+			return BigIntegerValue.valueOf(this, ((ArrayLeekValue) value).size());
 		} else if (value instanceof MapLeekValue) {
-			return BigIntegerValue.valueOf(((MapLeekValue) value).size());
+			return BigIntegerValue.valueOf(this, ((MapLeekValue) value).size());
 		} else if (value instanceof IntegerIntervalLeekValue interval) {
-			return BigIntegerValue.valueOf(interval.intervalSize(this));
+			return BigIntegerValue.valueOf(this, interval.intervalSize(this));
 		} else if (value instanceof RealIntervalLeekValue interval) {
-			return BigIntegerValue.valueOf((long) interval.intervalSize(this));
+			return BigIntegerValue.valueOf(this, (long) interval.intervalSize(this));
 		} else if (value instanceof String) {
 			var s = (String) value;
-			if (s.equals("true")) return BigIntegerValue.ONE;
-			if (s.equals("false")) return BigIntegerValue.ZERO;
-			if (s.isEmpty()) return BigIntegerValue.ZERO;
+			if (s.equals("true")) return BigIntegerValue.valueOf(this, 1);
+			if (s.equals("false")) return BigIntegerValue.valueOf(this, 0);
+			if (s.isEmpty()) return BigIntegerValue.valueOf(this, 0);
 			ops(s.length());
 			try {
-				return new BigIntegerValue(s);
+				return BigIntegerValue.valueOf(this, s);
 			} catch (Exception e) {
-				return BigIntegerValue.valueOf(s.length());
+				return BigIntegerValue.valueOf(this, s.length());
 			}
 		} else if (value instanceof FunctionLeekValue) {
-			return BigIntegerValue.ZERO;
+			return BigIntegerValue.valueOf(this, 0);
 		} else if (value instanceof Box box) {
 			return bigint(box.get());
 		} else if (value == null) {
-			return BigIntegerValue.ZERO;
+			return BigIntegerValue.valueOf(this, 0);
 		}
 		throw new RuntimeException("Valeur invalide : " + value);
 	}
@@ -1407,7 +1413,7 @@ public abstract class AI {
 		}
 		if (x instanceof BigIntegerValue || y instanceof BigIntegerValue) {
 			BigIntegerValue d = bigint(y);
-			if (d.equals(BigIntegerValue.ZERO)) return Double.NaN;
+			if (d.isZero()) return Double.NaN;
 			return bigint(x).divide(d);
 		}
 		return real(x) / real_y;
@@ -1416,7 +1422,7 @@ public abstract class AI {
 	public Number div(Object x, Object y) throws LeekRunException {
 		if (x instanceof BigIntegerValue || y instanceof BigIntegerValue) {
 			BigIntegerValue d = bigint(y);
-			if (d.equals(BigIntegerValue.ZERO)) return Double.NaN;
+			if (d.isZero()) return Double.NaN;
 			return bigint(x).divide(d);
 		}
 		return real(x) / real(y);
@@ -1425,7 +1431,7 @@ public abstract class AI {
 	public Number intdiv(Object x, Object y) throws LeekRunException {
 		if (x instanceof BigIntegerValue || y instanceof BigIntegerValue) {
 			BigIntegerValue d = bigint(y);
-			if (d.equals(BigIntegerValue.ZERO)) return Double.NaN;
+			if (d.isZero()) return Double.NaN;
 			return bigint(x).divide(d);
 		}
 		return longint(x) / longint(y);
@@ -1434,7 +1440,7 @@ public abstract class AI {
 	public Object mod(Object x, Object y) throws LeekRunException {
 		if (x instanceof BigIntegerValue || y instanceof BigIntegerValue) {
 			BigIntegerValue d = bigint(y);
-			if (d.equals(BigIntegerValue.ZERO)) return Double.NaN;
+			if (d.isZero()) return Double.NaN;
 			return bigint(x).mod(d);
 		}
 		if (x instanceof Double || y instanceof Double) {
@@ -1645,7 +1651,6 @@ public abstract class AI {
 			this.opsNoCheck(3);
 			return String.valueOf((Long) value);
 		} else if (value instanceof BigIntegerValue) {
-			this.ops(3);
 			return ((BigIntegerValue) value).toString();
 		} else if (value instanceof Boolean) {
 			return String.valueOf((Boolean) value);
@@ -3361,8 +3366,8 @@ public abstract class AI {
 		return 0l;
 	}
 	
-	public BigIntegerValue new_bigintegerClass() {
-		return BigIntegerValue.ZERO;
+	public BigIntegerValue new_bigIntegerClass() throws LeekRunException {
+		return new BigIntegerValue(this, 0);
 	}
 
 	public double new_realClass() {

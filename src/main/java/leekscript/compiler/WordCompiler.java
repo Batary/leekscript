@@ -1,6 +1,6 @@
 package leekscript.compiler;
 
-import leekscript.runner.values.BigIntegerValue;
+import java.math.BigInteger;
 import java.util.HashSet;
 
 import leekscript.common.AccessLevel;
@@ -1585,10 +1585,10 @@ public class WordCompiler {
 					if (s.endsWith("L")) {
 						try {
 							s = s.substring(0, s.length() - 1);
-							retour.addExpression(new LeekBigInteger(word, new BigIntegerValue(s, radix)));
+							retour.addExpression(new LeekBigInteger(word, new BigInteger(s, radix)));
 						} catch (NumberFormatException e) {
 							addError(new AnalyzeError(word, AnalyzeErrorLevel.ERROR, Error.INVALID_NUMBER));
-							retour.addExpression(new LeekBigInteger(word, BigIntegerValue.ZERO));
+							retour.addExpression(new LeekBigInteger(word, BigInteger.ZERO));
 						}
 					} else {
 						try {
@@ -1597,7 +1597,7 @@ public class WordCompiler {
 							} catch (NumberFormatException e2) {
 								if (s.contains(".")) throw e2;
 								// if number is too big, try to parse it as a BigInteger
-								else retour.addExpression(new LeekBigInteger(word, new BigIntegerValue(s, radix)));
+								else retour.addExpression(new LeekBigInteger(word, new BigInteger(s, radix)));
 							}
 						} catch (NumberFormatException e) {
 							s = word.getWord().replace("_", "");

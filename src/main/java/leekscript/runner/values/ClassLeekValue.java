@@ -2,6 +2,8 @@ package leekscript.runner.values;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
+
 import leekscript.runner.values.BigIntegerValue;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -418,7 +420,7 @@ public class ClassLeekValue extends FunctionLeekValue<Object> {
 		if (this == ai.nullClass) return null;
 		if (this == ai.booleanClass) return false;
 		if (this == ai.integerClass) return 0l;
-		if (this == ai.bigIntegerClass) return BigIntegerValue.ZERO;
+		if (this == ai.bigIntegerClass) return new BigIntegerValue(ai, BigInteger.ZERO);
 		if (this == ai.realClass || this == ai.numberClass) return 0.0;
 		if (this == ai.stringClass) return "";
 		if (this == ai.legacyArrayClass) {

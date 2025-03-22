@@ -3,7 +3,7 @@ package leekscript.common;
 public class BigIntegerType extends Type {
 
 	public BigIntegerType() {
-		super("big_integer", "l", "BigIntegerValue", "BigIntegerValue", "BigIntegerValue.ZERO");
+		super("big_integer", "l", "BigIntegerValue", "BigIntegerValue", "new BigIntegerValue()");
 	}
 
 	@Override
