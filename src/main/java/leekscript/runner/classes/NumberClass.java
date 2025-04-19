@@ -30,6 +30,14 @@ public class NumberClass {
 	public static BigIntegerValue min(AI ai, BigIntegerValue x, BigIntegerValue y) throws LeekRunException {
 		return x.min(y);
 	}
+	
+	public static BigIntegerValue min(AI ai, BigIntegerValue x, long y) throws LeekRunException {
+		return x.min(BigIntegerValue.valueOf(ai, y));
+	}
+	
+	public static BigIntegerValue min(AI ai, long x, BigIntegerValue y) throws LeekRunException {
+		return BigIntegerValue.valueOf(ai, x).min(y);
+	}
 
 	public static long max(AI ai, long x, long y) {
 		return Math.max(x, y);
@@ -41,6 +49,14 @@ public class NumberClass {
 	
 	public static BigIntegerValue max(AI ai, BigIntegerValue x, BigIntegerValue y) throws LeekRunException {
 		return x.max(y);
+	}
+	
+	public static BigIntegerValue max(AI ai, BigIntegerValue x, long y) throws LeekRunException {
+		return x.max(BigIntegerValue.valueOf(ai, y));
+	}
+	
+	public static BigIntegerValue max(AI ai, long x, BigIntegerValue y) throws LeekRunException {
+		return BigIntegerValue.valueOf(ai, x).max(y);
 	}
 
 	public static double cos(AI ai, double x) {
@@ -147,6 +163,14 @@ public class NumberClass {
 		return Math.pow(x, y);
 	}
 
+	public static Number pow(AI ai, BigIntegerValue x, BigIntegerValue y) throws LeekRunException {
+		return ai.pow(x, y);
+	}
+	
+	public static Number pow(AI ai, BigIntegerValue x, long y) throws LeekRunException {
+		return ai.pow(x, y);
+	}
+	
 	public static double rand(AI ai) {
 		return ai.getRandom().getDouble();
 	}
@@ -196,9 +220,53 @@ public class NumberClass {
 	public static long trailingZeros(AI ai, BigIntegerValue x) {
 		return (long) x.getLowestSetBit();
 	}
-
+	
 	public static long leadingZeros(AI ai, long x) {
 		return Long.numberOfLeadingZeros(x);
+	}
+	
+	public static long bitLength(AI ai, long x) {
+		return 64 - Long.numberOfLeadingZeros(x);
+	}
+
+	public static long bitLength(AI ai, BigIntegerValue x) {
+		return x.bitLength();
+	}
+	
+	public static long setBit(AI ai, long x, long pos, boolean val) {
+		if (val) {
+			return x | (1 << pos);
+		} else {
+			return x & ~(1 << pos);
+		}
+	}
+	
+	public static long setBit(AI ai, long x, long pos, long val) {
+		return setBit(ai, x, pos, val != 0);
+	}
+	
+	public static long setBit(AI ai, long x, long pos) {
+		return setBit(ai, x, pos, true);
+	}
+
+	public static BigIntegerValue setBit(AI ai, BigIntegerValue x, long pos, boolean val) throws LeekRunException {
+		return x.setBit((int) pos, val);
+	}
+	
+	public static BigIntegerValue setBit(AI ai, BigIntegerValue x, long pos, long val) throws LeekRunException {
+		return x.setBit((int) pos, val != 0);
+	}
+	
+	public static BigIntegerValue setBit(AI ai, BigIntegerValue x, long pos) throws LeekRunException {
+		return x.setBit((int) pos, true);
+	}
+	
+	public static boolean testBit(AI ai, long x, long pos) {
+		return (x & (1 << pos)) != 0;
+	}
+	
+	public static boolean testBit(AI ai, BigIntegerValue x, long pos) {
+		return x.testBit((int) pos);
 	}
 
 	public static long bitReverse(AI ai, long x) {

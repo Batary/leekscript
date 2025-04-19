@@ -9,7 +9,7 @@ public class TestBigInt extends TestCommon {
 		header("Big Numbers");
 
 		section("Performance");
-		
+
 //		code_v4_("big_integer a = 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0"); // warmup
 //		
 //		code_v4_("for (var k in [0..10000000]) {var a = 5;}; return 0;").equals("0");
@@ -170,7 +170,7 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("big_integer a = 1, b = 1L << 20000, c = 4800; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
 //		code_v4_("big_integer a = 1, b = 1L << 20000, c = 48000; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
 //		code_v4_("big_integer a = 1, b = 1L << 20000, c = b/2; for (var k in [0..100000]) a = b % c; return 0;").equals("0");
-	
+
 //		section("Basic numbers");
 //		code_v4_("return 0L").equals("0");
 //		code_v4_("return -1L").equals("-1");
@@ -537,8 +537,8 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("var a = 5L; return a **= 4").equals("625");
 //		code_v4_("var a = 5L; return a **= true").equals("5");
 //		code_v4_("var a = null a **= 5L return a").equals("0");
-//		code_strict("var a = null a **= 5L return a").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
-//		code_strict("any a = null return a **= 5L").equals("0");
+//		//code_strict("var a = null a **= 5L return a").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
+//		//code_strict("any a = null return a **= 5L").error(Error.ASSIGNMENT_INCOMPATIBLE_TYPE);
 //
 //		section("Number.operator %");
 //		code_v4_("return 721L % 57;").equals("37");
@@ -700,10 +700,13 @@ public class TestBigInt extends TestCommon {
 //		// code_v4_("87619$ ^= 18431").error(ls::Error::VALUE_MUST_BE_A_LVALUE, {"87619"});
 //		code_v4_("var a = 87619L a ^= 18431L return a;").equals("70076");
 //		// code_v4_("[12, 'hello'][1] ^ 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-
-		section("Number.operator <<");
+//
+//		section("Number.operator <<");
 //		code_v4_("return 0L << 0;").equals("0");
 //		code_v4_("return 1L << 0;").equals("1");
+//		code_v4_("return 0L << 0L;").equals("0");
+//		code_v4_("return 1L << 1L;").equals("2");
+//		code_v4_("return 1 << 0L;").equals("1");
 //		code_v4_("return 123456L << 0;").equals("123456");
 //		code_v4_("return 0L << 1;").equals("0");
 //		code_v4_("return 0L << 12;").equals("0");
@@ -711,503 +714,307 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("return 123L << 121;").equals("326990086963089304734336536828964765696");
 //		code_v4_("return [123L, ''][0] << 12;").equals("503808");
 //		code_v4_("var a = 123L return a <<= 11;").equals("251904");
-		code_v4_("big_integer a = 123L return a << 11;").equals("251904");
-		// TODO cast to BigIntegerValue or add another shl function
-		code_v4_("big_integer a = 123L return a <<= 11;").equals("251904");
-		code_v4_("big_integer a = 123L a <<= 13 return a;").equals("1007616");
-		code_v4_("big_integer a = 123 a <<= 13 return a;").equals("1007616");
+//		code_v4_("integer a = 123 return a <<= 11;").equals("251904");
+//		code_v4_("big_integer a = 123L return a << 11L;").equals("251904");
+//		code_v4_("big_integer a = 123L return a <<= 11;").equals("251904");
+//		code_v4_("big_integer a = 123L a <<= 13 return a;").equals("1007616");
+//		code_v4_("var a = 123L a <<= 13 return a;").equals("1007616");
+//		code_v4_("big_integer a = 123 a <<= 13 return a;").equals("1007616");
+//
+//		
+//		
+//		
+//		code_v4_("big_integer a = 123 a >>= 1 return a;").equals("61");
+//		code_v4_("big_integer a = 123 a >>>= 2 return a;").equals("30");
+//		code_v4_("big_integer a = 123 a += 13 return a;").equals("136");
+//		code_v4_("big_integer a = 123 a *= 13 return a;").equals("1599");
+//		code_v4_("big_integer a = 123 a **= 13 return a;").equals("1474913153392179474539944683");
+//		code_v4_("big_integer a = 123 a /= 13 return a;").equals("9");
+//		code_v4_("big_integer a = 123 a \\= 13 return a;").equals("9");
+//		code_v4_("big_integer a = 123 a &= 13 return a;").equals("9");
+//		code_v4_("big_integer a = 123 a ^= 13 return a;").equals("118");
+//		
+//		code_v4_("var a = 123L a >>= 1 return a;").equals("61");
+//		code_v4_("var a = 123L a >>>= 2 return a;").equals("30");
+//		code_v4_("var a = 123L a += 13 return a;").equals("136");
+//		code_v4_("var a = 123L a **= 13 return a;").equals("1474913153392179474539944683");
+//		code_v4_("var a = 123L a /= 13 return a;").equals("9");
+//		
+//		code_v4_("var a = 123 a **= 3 return a;").equals("1860867");
+//		code_v4_("integer a = 123 a **= 3 return a;").equals("1860867");
+//		code_v4_("integer a = 123 a **= 3L return a;").equals("1860867");
+//		code_v4_("var a = 123 a >>= 1L return a;").equals("61");
+//		code_v4_("var a = 123 a >>= 1 return a;").equals("61");
+//		code_v4_("var a = [123L] return a[0] >>>= 1").equals("61");
+//		code_v4_("var a = [123] return a[0] >>>= 1").equals("61");
+//		code_v4_("Array<integer> a = [123] return a[0] >>>= 1").equals("61");
+//		code_v4_("Array<big_integer> a = [123L] return a[0] >>>= 1").equals("61");
+//		
+//		code_v4_("var a = 123 a -= 13 return a;").equals("110");
+//		code_v4_("var a = 123 a -= 13L return a;").equals("110");
+//		code_v4_("integer a = 123 a -= 13 return a;").equals("110");
+//		code_v4_("big_integer a = 123 a -= 13 return a;").equals("110");
+//		
+//		code_v4_("big_integer a = 123 a -= 13L return a;").equals("110");
+//		code_v4_("integer a = 123 a = a - 13L return a;").equals("110");
+//		code_v4_("integer a = 123 a -= 13L return a;").equals("110");
+//		code_v4_("integer a = 123 var b = 13L a -= b return a;").equals("110");
+//		
+//		
 //		code_v4_("var a = [123L, ''] return a[0] <<= 13;").equals("1007616");
 //		code_v4_("var a = 123L return ['', a <<= 13];").equals("[\"\", 1007616]");
-		// code_v4_("'salut' << 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
-
-//		section("Number.operator >>");
-//		code_v4_("return 0 >> 0;").equals("0");
-//		code_v4_("return 1 >> 0;").equals("1");
-//		code_v4_("return 123456 >> 0;").equals("123456");
-//		code_v4_("return 0 >> 1;").equals("0");
-//		code_v4_("return 0 >> 12;").equals("0");
-//		code_v4_("return 155 >> 3;").equals("19");
-//		code_v4_("return -155 >> 3;").equals("-20");
-//		code_v4_("return 12345 >> 8;").equals("48");
-//		code_v4_("return 123123123 >> 5;").equals("3847597");
-//		code_v4_("return [123123123, ''][0] >> 5;").equals("3847597");
-//		code_v4_("var a = 123123123 return a >>= 6;").equals("1923798");
-//		code_v4_("var a = 123123123 a >>= 7 return a;").equals("961899");
-//		code_v4_("var a = [123123123, ''] return a[0] >>= 7;").equals("961899");
-//		code_v4_("var a = 12345 return ['', a >>= 8];").equals("[\"\", 48]");
-//		// code_v4_("'salut' >> 5").error(ls::Error::NO_SUCH_OPERATOR, {env.tmp_string->to_string(), ">>", env.integer->to_string()});
-
-//		section("Number.operator >>>");
-//		code_v4_("return 155 >>> 3;").equals("19");
-//		code_v4_("return -155 >>> 3;").equals("2305843009213693932");
-//		code_v4_("return [-155, ''][0] >>> 3;").equals("2305843009213693932");
-//		code_v4_("var a = -155 return a >>>= 4;").equals("1152921504606846966");
-//		code_v4_("var a = -155 a >>>= 5 return a;").equals("576460752303423483");
-//		code_v4_("var a = [-155, ''] return a[0] >>>= 5;").equals("576460752303423483");
-//		code_v4_("var a = -155 return ['', a >>>= 5];").equals("[\"\", 576460752303423483]");
-//		// code_v4_("'salut' >>> 5").error(ls::Error::NO_SUCH_OPERATOR, {env.tmp_string->to_string(), ">>>", env.integer->to_string()});
+//		// code_v4_("'salut' << 5").exception(ls::vm::Exception::NO_SUCH_OPERATOR);
 //
+//		section("Number.operator >>");
+//		code_v4_("return 0 >> 0L;").equals("0");
+//		code_v4_("return 1L >> 0;").equals("1");
+//		code_v4_("return 123456L >> 0L;").equals("123456");
+//		code_v4_("return 0L >> 1L;").equals("0");
+//		code_v4_("return 0L >> 12;").equals("0");
+//		code_v4_("return 155L >> 3;").equals("19");
+//		code_v4_("return -155L >> 3;").equals("-20");
+//		code_v4_("return 12345L >> 8;").equals("48");
+//		code_v4_("return 123123123L >> 5;").equals("3847597");
+//		code_v4_("return [123123123L, ''][0] >> 5;").equals("3847597");
+//		code_v4_("var a = 123123123 return a >>= 6L;").equals("1923798");
+//		code_v4_("var a = 123123123L return a >>= 6L;").equals("1923798");
+//		code_v4_("big_integer a = 123123123L return a >>= 6L;").equals("1923798");
+//		code_v4_("var a = 123123123L a >>= 7 return a;").equals("961899");
+//		code_v4_("var a = [123123123L, ''] return a[0] >>= 7;").equals("961899");
+//		code_v4_("big_integer a = 12345 return ['', a >>= 8];").equals("[\"\", 48]");
+//
+//		section("Number.operator >>>");
+//		code_v4_("return 0L >>> 0L;").equals("0");
+//		code_v4_("return 1L >>> 0;").equals("1");
+//		code_v4_("return 123456L >>> 0L;").equals("123456");
+//		code_v4_("return 0L >>> 1L;").equals("0");
+//		code_v4_("return 0L >>> 12;").equals("0");
+//		code_v4_("return 155L >>> 3;").equals("19");
+//		code_v4_("return -155L >>> 3;").equals("-20");
+//		code_v4_("return 12345L >>> 8;").equals("48");
+//		code_v4_("return 123123123L >>> 5;").equals("3847597");
+//		code_v4_("return [123123123L, ''][0] >>> 5;").equals("3847597");
+//		code_v4_("var a = 123123123L return a >>>= 6L;").equals("1923798");
+//		code_v4_("var a = 123123123L return a >>>= 6L;").equals("1923798");
+//		code_v4_("big_integer a = 123123123L return a >>>= 6L;").equals("1923798");
+//		code_v4_("var a = 123123123L a >>>= 7 return a;").equals("961899");
+//		code_v4_("var a = [123123123L, ''] return a[0] >>>= 7;").equals("961899");
+//		code_v4_("big_integer a = 12345 return ['', a >>>= 8];").equals("[\"\", 48]");
+//		
 //		section("Not a statement errors");
-//		code_v4_("null; return null;").equals("null");
-//		code_v4_("(null); return null;").equals("null");
-//		code_v4_("((null)); return null;").equals("null");
-//		code_v4_("true; return null;").equals("null");
-//		code_v4_("false; return null;").equals("null");
-//		code_v4_("'salut'; return null;").equals("null");
-//		code_v4_("var a; a; return null;").equals("null");
-//		code_v4_("12; return null;").equals("null");
-//		code_v4_("12 && 5; return null;").equals("null");
-//		code_v4_("12 + 5; return null;").equals("null");
-//		code_v4_("12 - 5; return null;").equals("null");
-//		code_v4_("12 * 5; return null;").equals("null");
-//		code_v4_("12 / 5; return null;").equals("null");
-//		code_v4_("12 % 5; return null;").equals("null");
-//		code_v4_("12 ** 5; return null;").equals("null");
-//		code_v4_("12 ^ 5; return null;").equals("null");
-//		code_v4_("12 & 5; return null;").equals("null");
-//		code_v4_("12 | 5; return null;").equals("null");
-//		code_v4_("12 < 5; return null;").equals("null");
-//		code_v4_("12 > 5; return null;").equals("null");
-//		code_v4_("12 <= 5; return null;").equals("null");
-//		code_v4_("12 >= 5; return null;").equals("null");
-//		code_v4_("12 == 5; return null;").equals("null");
-//		code_v4_("12 === 5; return null;").equals("null");
-//		code_v4_("(12 && 5); return null;").equals("null");
-//		code_v4_("true ? 1 : 2; return null;").equals("null");
-//		code_v4_("(true ? 1 : 2); return null;").equals("null");
+//		code_v4_("big_integer a; a; return null;").equals("null");
+//		code_v4_("big_integer a; return null;").equals("null");
+//		code_v4_("BigInteger a; return null;").equals("null");
+//		code_v4_("12L; return null;").equals("null");
+//		code_v4_("12 && 5L; return null;").equals("null");
+//		code_v4_("12L + 5L; return null;").equals("null");
+//		code_v4_("12L - 5; return null;").equals("null");
+//		code_v4_("12 * 5L; return null;").equals("null");
+//		code_v4_("12L / 5L; return null;").equals("null");
+//		code_v4_("12L % 5; return null;").equals("null");
+//		code_v4_("12 ** 5L; return null;").equals("null");
+//		code_v4_("12L ^ 5; return null;").equals("null");
+//		code_v4_("12L & 5L; return null;").equals("null");
+//		code_v4_("12L | 5; return null;").equals("null");
+//		code_v4_("12 < 5L; return null;").equals("null");
+//		code_v4_("12L > 5L; return null;").equals("null");
+//		code_v4_("12L <= 5; return null;").equals("null");
+//		code_v4_("12 >= 5L; return null;").equals("null");
+//		code_v4_("12L == 5L; return null;").equals("null");
+//		code_v4_("12L === 5; return null;").equals("null");
+//		code_v4_("(12 && 5L); return null;").equals("null");
+//		code_v4_("true ? 1L : 2; return null;").equals("null");
+//		code_v4_("(true ? 1 : 2L); return null;").equals("null");
 //
 //		/*
 //		* Methods
 //		*/
 //		section("Number.abs()");
-//		// code_v4_("return abs;").equals("<function>");
-//		code_v4_("return abs(-12);").equals("12");
-//		code_v4_("return abs(-19.5);").equals("19,5");
-//		code_v4_("return abs(-19.5);").equals("19.5");
-//		code_v4_("return abs(12);").equals("12");
-//		// code_v4_("return abs(-16436435l)").equals("16436435");
-//		code_v4_("return abs(-12.67);").equals("12,67");
-//		code_v4_("return abs(-12.67);").equals("12.67");
-//		code_v4_("return abs(['a', -15][1]);").equals("15");
-//		// code_v4_("return (-17).abs()").equals("17");
-//		// code_v4_("return (-19.5).abs()").equals("19.5");
-//		// code_v4_("return 12.abs").equals("<function>");
-//		// code_v4_("abs([1, 'salut'][1])").exception(ls::vm::Exception::WRONG_ARGUMENT_TYPE);
-//		code_v4_("return abs(null)").equals("0");
-//		code_v4_("return abs(null)").equals("0.0");
-//		code_strict("return abs(null)").error(Error.WRONG_ARGUMENT_TYPE);
-//		code_v4_("var ax = randInt(-17, 17) var ay = randInt(-17 + abs(ax), 17 - abs(ax))").debug().equals("null");
+//		code_v4_("return abs(-12L);").equals("12");
+//		code_v4_("return abs(-(null - 0L));").equals("0");
+//		code_v4_("return abs((null ^ 0L));").equals("0");
+//		code_v4_("return abs(~10L);").equals("11");
+//		code_v4_("return abs(null);").equals("0.0");
+//		code_v4_("big_integer a = -5; var b = [a][0]; return abs(b);").equals("5");
+//		code_v4_("return abs(12L);").equals("12");
+//		code_v4_("return abs(-164364351523458645648946541564892345665)").equals("164364351523458645648946541564892345665");
+//		code_v4_("return abs(['a', -15L][1]);").equals("15");
 //
 //		section("Number.exp()");
-//		code_v4_("return exp(0)").equals("1");
-//		code_v4_("return exp(0)").equals("1.0");
-//		code_v4_("return exp(1)").equals("2,718");
-//		code_v4_("return exp(1)").almost(Math.E);
-//		code_v4_("return exp(4)").equals("54,598");
-//		code_v4_("return exp(4)").almost(54.598150033144236204);
-//		code_v4_("return exp(4.89)").equals("132,954");
-//		code_v4_("return exp(4.89)").almost(132.953574051282743085);
-//		code_v4_("return exp(-2.97)").equals("0,051");
-//		code_v4_("return exp(-2.97)").almost(0.051303310331919108);
-//		code_v4_("return exp(['a', 7.78][1])").equals("2 392,275");
-//		code_v4_("return exp(['a', 7.78][1])").almost(2392.274820537377763685);
-//		// code_v4_("return 0.exp();").equals("1");
-//		// code_v4_("return 1.exp();").almost(Math.E);
-//		// code_v4_("return 7.exp();").almost(1096.633158428458500566);
-//		// code_v4_("return (-7).exp();").almost(0.000911881965554516);
-//		// code_v4_("return (-3.33).exp();").almost(0.035793105067655297);
-//		code_v4_("return E ** 5;").equals("148,413");
-//		code_v4_("return E ** 5;").almost(148.413159102576571513);
+//		code_v4_("return exp(0L)").equals("1.0");
+//		code_v4_("return exp(1L)").almost(Math.E);
+//		code_v4_("return exp(4L)").almost(54.598150033144236204);
+//		code_v4_("return exp(['a', 4L][1])").almost(54.598150033144236204);
+//		code_v4_("return E ** 5L;").almost(148.413159102576571513);
 //
 //		section("Number.floor()");
-//		code_v4_("return floor(5.9);").equals("5");
-//		code_v4_("var a = 5 return floor(a);").equals("5");
-//		code_v4_("var a = 5.4 return floor(a);").equals("5");
-//		code_v4_("return floor(['a', -14.7][1]);").equals("-15");
-//		code_v4_("return floor(5.5);").equals("5");
-//		code_v4_("return floor(1.897)").equals("1");
-//		code_v4_("return floor(3.01)").equals("3");
+//		code_v4_("return floor(5L);").equals("5");
+//		code_v4_("var a = 5L return floor(a);").equals("5");
+//		code_v4_("var a = -5L return floor(a);").equals("-5");
+//		code_v4_("return floor(['a', -14][1]);").equals("-14");
+//		code_v4_("return floor(5);").equals("5");
 //
 //		section("Number.round()");
-//		code_v4_("return round(5.7)").equals("6");
-//		code_v4_("return round(5.4)").equals("5");
-//		code_v4_("return round(['a', -15.89][1])").equals("-16");
-//		code_v4_("return round(12)").equals("12");
-//		code_v4_("return round(-1000)").equals("-1000");
-//		code_v4_("return round(1.897)").equals("2");
-//		code_v4_("return round(3.01)").equals("3");
+//		code_v4_("return round(5L);").equals("5");
+//		code_v4_("var a = 5L return round(a);").equals("5");
+//		code_v4_("var a = -5L return round(a);").equals("-5");
+//		code_v4_("return round(['a', -14][1]);").equals("-14");
+//		code_v4_("return round(5);").equals("5");
 //
 //		section("Number.ceil()");
-//		code_v4_("return ceil(5.1)").equals("6");
-//		code_v4_("return ceil(188)").equals("188");
-//		code_v4_("return ceil(1.897)").equals("2");
-//		code_v4_("return ceil(3.01)").equals("4");
+//		code_v4_("return ceil(5L);").equals("5");
+//		code_v4_("var a = 5L return ceil(a);").equals("5");
+//		code_v4_("var a = -5L return ceil(a);").equals("-5");
+//		code_v4_("return ceil(['a', -14][1]);").equals("-14");
+//		code_v4_("return ceil(5);").equals("5");
 //
 //		section("Number.max()");
-//		code_v4_("return max(8, 5)").equals("8");
-//		code_v4_("return max(8, 88)").equals("88");
-//		code_v4_("return max(5, 12);").equals("12");
-//		code_v4_("return max(5.0, 12);").equals("12");
-//		code_v4_("return max(5.0, 12);").equals("12.0");
-//		code_v4_("return max(75.7, 12);").equals("75,7");
-//		code_v4_("return max(75.7, 12);").almost(75.7);
-//		code_v4_("return max(5, 12.451);").equals("12,451");
-//		code_v4_("return max(5, 12.451);").almost(12.451);
-//		code_v4_("return max([5, 'a'][0], 4);").equals("5");
-//		code_v4_("return max([5, 'a'][0], 76);").equals("76");
-//		code_v4_("return max(4, [5, 'a'][0]);").equals("5");
-//		code_v4_("return max(77, [5, 'a'][0]);").equals("77");
-//		code_v4_("return max([55, 'a'][0], [5, 'a'][0]);").equals("55");
-//		code_v4_("return max(5, 12.8);").equals("12,8");
-//		code_v4_("return max(5, 12.8);").equals("12.8");
-//		code_v4_("return max(15.7, 12.8);").equals("15,7");
-//		code_v4_("return max(15.7, 12.8);").equals("15.7");
-//		code_v4_("return max([15.7, ''][0], 12.8);").equals("15,7");
-//		code_v4_("return max([15.7, ''][0], 12.8);").equals("15.7");
-//		code_v4_("return max(5.5, [12.8, ''][0]);").equals("12,8");
-//		code_v4_("return max(5.5, [12.8, ''][0]);").equals("12.8");
-//		code_v4_("var a = 0.8 return max(0, a)").equals("0,8");
-//		code_v4_("var a = 0.8 return max(0, a)").equals("0.8");
-//		code_v4_("real value = 5 value *= max(1, 1.1) return value").equals("5,5");
-//		code_v4_("real value = 5 value *= max(1, 1.1) return value").equals("5.5");
-//		// code_v4_("return 2.max([7.5, ''][0]);").equals("7.5");
-//		// code_v4_("return [2, ''][0].max([7.5, ''][0]);").equals("7.5");
-//		// code_v4_("2.max([7.5, ''][1])").exception(ls::vm::Exception::WRONG_ARGUMENT_TYPE);
-//		// code_v4_("return max(5l, 10.5)").equals("10.5");
-//		// code_v4_("return max(5l, 10)").equals("10");
-//		// code_v4_("return max(true, 10l)").equals("10");
-//		// code_v4_("max('string', 12)").error(ls::Error::METHOD_NOT_FOUND, {"max(" + env.tmp_string->to_string() + ", " + env.integer->to_string() + ")"});
-//
+//		code_v4_("return max(8, 5L)").equals("8");
+//		code_v4_("return max(8L, 88)").equals("88");
+//		code_v4_("return max(5L, 12L);").equals("12");
+//		code_v4_("return max(5.0, 12L);").equals("12.0");
+//		code_v4_("return max(5L, 12.0);").equals("12.0");
+//		code_v4_("return max(75.7, 12L);").equals("75.7");
+//		code_v4_("return max(5.0, 5L);").equals("5.0");
+//		code_v4_("return max(5L, 12.451);").almost(12.451);
+//		code_v4_("return max([5L, 'a'][0], 4);").equals("5");
+//		code_v4_("return max([5, 'a'][0], 76L);").equals("76");
+//		code_v4_("return max(4, [5L, 'a'][0]);").equals("5");
+//		code_v4_("return max(77L, [5.3, 'a'][0]);").equals("77.0");
+//		code_v4_("return max([55L, 'a'][0], [5, 'a'][0]);").equals("55");
+//		code_v4_("var a = 0.8 return max(0L, a)").equals("0.8");
+//		code_v4_("big_integer a = 1 return max(0, a)").equals("1");
+//		code_v4_("real value = 5 value *= max(1L, 1.1) return value").equals("5.5");
+//		code_v4_("big_integer value = 5 value *= max(1, 2L) return value").equals("10");
+//		
 //		section("Number.min()");
-//		code_v4_("return min(8, 5)").equals("5");
-//		code_v4_("return min(8, 88)").equals("8");
-//		code_v4_("return min(5, 12)").equals("5");
-//		code_v4_("return min(75.7, 12)").equals("12");
-//		code_v4_("return min(75.7, 12)").almost(12.0);
-//		code_v4_("return min(5, 12.451)").equals("5");
-//		code_v4_("return min(5, 12.451)").almost(5.0);
-//		code_v4_("return min([5, 'a'][0], 4)").equals("4");
-//		code_v4_("return min([5, 'a'][0], 76)").equals("5");
-//		code_v4_("return min(4, [5, 'a'][0])").equals("4");
-//		code_v4_("return min(77, [5, 'a'][0])").equals("5");
-//		code_v4_("return min([55, 'a'][0], [5, 'a'][0])").equals("5");
-//		code_v4_("return min(5, 12.8)").equals("5");
-//		code_v4_("return min(5, 12.8)").equals("5.0");
-//		code_v4_("return min(15.7, 12.8)").equals("12,8");
-//		code_v4_("return min(15.7, 12.8)").equals("12.8");
-//		code_v4_("return min([15.7, ''][0], 12.8)").equals("12,8");
-//		code_v4_("return min([15.7, ''][0], 12.8)").equals("12.8");
-//		code_v4_("return min(5.5, [12.8, ''][0])").equals("5,5");
-//		code_v4_("return min(5.5, [12.8, ''][0])").equals("5.5");
-//		code_v4_("return -min(15.7, 12)").equals("-12");
-//		code_v4_("return -min(15.7, 12)").equals("-12.0");
-//		// code_v4_("return min(5l, 10.5);").equals("5");
-//		// code_v4_("return min(5l, 10);").equals("5");
-//		// code_v4_("return min(true, 10l);").equals("1");
-//		// code_v4_("min('string', 12)").error(ls::Error::METHOD_NOT_FOUND, {"min(" + env.tmp_string->to_string() + ", " + env.integer->to_string() + ")"});
-//
+//		code_v4_("return min(8, 5L)").equals("5");
+//		code_v4_("return min(8L, 88)").equals("8");
+//		code_v4_("return min(5L, 12L);").equals("5");
+//		code_v4_("return min(5.0, 12L);").equals("5.0");
+//		code_v4_("return min(5L, 12.0);").equals("5.0");
+//		code_v4_("return min(75.7, 12L);").equals("12.0");
+//		code_v4_("return min(5.0, 5L);").equals("5.0");
+//		code_v4_("return min(5L, 12.451);").equals("5.0");
+//		code_v4_("return min([5L, 'a'][0], 4);").equals("4");
+//		code_v4_("return min([5, 'a'][0], 76L);").equals("5");
+//		code_v4_("return min(4, [5L, 'a'][0]);").equals("4");
+//		code_v4_("return min(77L, [5.3, 'a'][0]);").equals("5.3");
+//		code_v4_("return min([55L, 'a'][0], [5, 'a'][0]);").equals("5");
+//		code_v4_("var a = 0.8 return min(0L, a)").equals("0.0");
+//		code_v4_("big_integer a = 1 return min(0, a)").equals("0");
+//		code_v4_("real value = 5 value *= min(1L, 1.1) return value").equals("5.0");
+//		code_v4_("big_integer value = 5 value *= min(1, 2L) return value").equals("5");
+//		
 //		section("Number.cos()");
-//		code_v4_("return cos(0)").equals("1");
-//		code_v4_("return cos(0)").equals("1.0");
-//		code_v4_("return cos(2.5)").equals("-0,801");
-//		code_v4_("return cos(2.5)").almost(Math.cos(2.5));
-//		code_v4_("return cos(PI)").equals("-1");
-//		code_v4_("return cos(PI)").equals("-1.0");
-//		code_v4_("return cos(PI / 2)").equals("0");
-//		code_v4_("return cos(PI / 2)").almost(0.0);
-//		// code_v4_("return π.cos()").equals("-1");
-//		// code_v4_("return ['', π][1].cos()").equals("-1");
-//		code_v4_("return cos(['', PI][1]);").equals("-1");
-//		code_v4_("return cos(['', PI][1]);").equals("-1.0");
-//		code_v4_("return cos(PI);").equals("-1");
-//		code_v4_("return cos(PI);").equals("-1.0");
+//		code_v4_("return cos(0L)").equals("1.0");
 //
 //		section("Number.acos()");
-//		code_v4_("return acos(1)").equals("0");
-//		code_v4_("return acos(1)").equals("0.0");
-//		code_v4_("return acos(-1)").equals("3,142");
-//		code_v4_("return acos(-1)").almost(Math.PI);
-//		code_v4_("return acos(0)").equals("1,571");
-//		code_v4_("return acos(0)").almost(Math.PI / 2);
-//		// code_v4_("return (-0.33).acos()").almost(1.907099901948877019);
-//		code_v4_("return acos(['y', 0][1])").equals("1,571");
-//		code_v4_("return acos(['y', 0][1])").almost(Math.PI / 2);
-//
+//		code_v4_("return acos(1L)").equals("0.0");
+//		
 //		section("Number.sin()");
-//		code_v4_("return sin(0)").equals("0");
-//		code_v4_("return sin(0)").equals("0.0");
-//		code_v4_("return sin(2.5)").equals("0,598");
-//		code_v4_("return sin(2.5)").almost(Math.sin(2.5));
-//		code_v4_("return sin(PI)").equals("0");
-//		code_v4_("return sin(PI)").almost(0.0);
-//		code_v4_("return sin(PI / 2)").equals("1");
-//		code_v4_("return sin(PI / 2)").equals("1.0");
-//		code_v4_("return sin(- PI / 2)").equals("-1");
-//		code_v4_("return sin(- PI / 2)").equals("-1.0");
-//		code_v4_("return sin(['', PI / 2][1])").equals("1");
-//		code_v4_("return sin(['', PI / 2][1])").equals("1.0");
-//		code_v4_("return sin(PI / 2)").equals("1");
-//		code_v4_("return sin(PI / 2)").equals("1.0");
+//		code_v4_("return sin(0L)").equals("0.0");
 //
 //		section("Number.tan()");
-//		code_v4_("return tan(0)").equals("0");
-//		code_v4_("return tan(0)").equals("0.0");
-//		code_v4_("return tan(2.5)").equals("-0,747");
-//		code_v4_("return tan(2.5)").almost(Math.tan(2.5));
-//		code_v4_("return tan(PI)").equals("-0");
-//		code_v4_("return tan(PI)").almost(0.0);
-//		code_v4_("return tan(PI / 4)").equals("1");
-//		code_v4_("return tan(PI / 4)").almost(1.0);
-//		code_v4_("return tan(- PI / 4)").equals("-1");
-//		code_v4_("return tan(- PI / 4)").almost(-1.0);
-//		code_v4_("return tan(['', PI / 4][1])").equals("1");
-//		code_v4_("return tan(['', PI / 4][1])").almost(1.0);
-//
+//		code_v4_("return tan(0L)").equals("0.0");
+//		
 //		section("Number.asin()");
-//		code_v4_("return asin(0)").equals("0");
-//		code_v4_("return asin(0)").equals("0.0");
-//		code_v4_("return asin(-1)").equals("-1,571");
-//		code_v4_("return asin(-1)").almost(-Math.PI / 2);
-//		code_v4_("return asin(1)").equals("1,571");
-//		code_v4_("return asin(1)").almost(Math.PI / 2);
-//		// code_v4_("return 0.33.asin()").almost(0.33630357515398035);
-//		code_v4_("return asin(['y', -1][1])").equals("-1,571");
-//		code_v4_("return asin(['y', -1][1])").almost(-Math.PI / 2);
+//		code_v4_("return asin(0L)").equals("0.0");
 //
 //		section("Number.atan()");
-//		code_v4_("return atan(1)").equals("0,785");
-//		code_v4_("return atan(1)").almost(Math.PI / 4);
-//		code_v4_("return atan(-1)").equals("-0,785");
-//		code_v4_("return atan(-1)").almost(-Math.PI / 4);
-//		code_v4_("return atan(0.5)").equals("0,464");
-//		code_v4_("return atan(0.5)").almost(0.463647609000806094);
-//		// code_v4_("return 0.atan()").equals("0");
-//		code_v4_("return atan(['y', 0.5][1])").equals("0,464");
-//		code_v4_("return atan(['y', 0.5][1])").almost(0.463647609000806094);
+//		code_v4_("return atan(1L)").equals("0.7853981633974483");
 //
 //		section("Number.atan2()");
-//		code_v4_("return atan2(1, 1)").equals("0,785");
-//		code_v4_("return atan2(1, 1)").almost(Math.PI / 4);
-//		code_v4_("return atan2(150.78, 150.78)").equals("0,785");
-//		code_v4_("return atan2(150.78, 150.78)").almost(Math.PI / 4);
-//		code_v4_("return atan2(1, 0)").equals("1,571");
-//		code_v4_("return atan2(1, 0)").almost(Math.PI / 2);
-//		code_v4_("return atan2(-1, 0)").equals("-1,571");
-//		code_v4_("return atan2(-1, 0)").almost(-Math.PI / 2);
-//		code_v4_("return atan2(0, 1)").equals("0");
-//		code_v4_("return atan2(0, 1)").equals("0.0");
-//		code_v4_("return atan2(0, -1)").equals("3,142");
-//		code_v4_("return atan2(0, -1)").almost(Math.PI);
-//		code_v4_("return atan2(12.12, 42.42)").equals("0,278");
-//		code_v4_("return atan2(12.12, 42.42)").almost(0.278299659005111333);
-//		// code_v4_("return 1.atan2(1)").almost(Math.PI / 4);
-//		// code_v4_("return ['', -1][1].atan2(1)").almost(-Math.PI / 4);
-//		// code_v4_("return 1.atan2(['', -1][1])").almost(3 * Math.PI / 4);
-//		// code_v4_("return ['', -1][1].atan2(['', -1][1])").almost(-3 * Math.PI / 4);
-//		code_v4_("return atan2(1, 1)").equals("0,785");
-//		code_v4_("return atan2(1, 1)").almost(Math.PI / 4);
-//		code_v4_("return atan2(['', -1][1], 1)").equals("-0,785");
-//		code_v4_("return atan2(['', -1][1], 1)").almost(-Math.PI / 4);
-//		code_v4_("return atan2(1, ['', -1][1])").equals("2,356");
-//		code_v4_("return atan2(1, ['', -1][1])").almost(3 * Math.PI / 4);
-//		code_v4_("return atan2(['', -1][1], ['', -1][1])").equals("-2,356");
-//		code_v4_("return atan2(['', -1][1], ['', -1][1])").almost(-3 * Math.PI / 4);
-//		// code_v4_("return atan2(1, true)").almost(Math.PI / 4);
-//		// code_v4_("return atan2(true, false)").almost(Math.PI / 2);
+//		code_v4_("return atan2(1L, 1L)").equals("0.7853981633974483");
 //
 //		section("Number.cbrt()");
-//		code_v4_("return cbrt(125)").almost(5.0);
-//		code_v4_("return cbrt(1000)").almost(10.0);
-//		code_v4_("return cbrt(1728)").almost(12.0, 1e-14);
-//		// code_v4_("return 1728.cbrt()").almost(12.0, 0.00000000000001);
-//		code_v4_("return cbrt(['', 1728][1])").almost(12.0, 0.00000000000001);
-//		// code_v4_("return ['', 1728][1].cbrt()").almost(12.0, 0.00000000000001);
+//		code_v4_("return cbrt(125L)").almost(5.0);
 //
-//		// section("Number.int()");
-//		// code_v4_("int(15.1)").equals("15");
-//		// code_v4_("int(15.5)").equals("15");
-//		// code_v4_("int(15.9)").equals("15");
-//
-//		// section("Number.isInteger()");
-//		// code_v4_("isInteger(12)").equals("true");
-//		// code_v4_("isInteger(0)").equals("true");
-//		// code_v4_("isInteger(-5)").equals("true");
-//		// code_v4_("isInteger(12.9)").equals("false");
-//		// code_v4_("isInteger(-5.2)").equals("false");
-//		// code_v4_("isInteger(π)").equals("false");
-//		// code_v4_("12.isInteger()").equals("true");
-//		// code_v4_("12.5.isInteger()").equals("false");
-//		// code_v4_("[12, 0][0].isInteger()").equals("true");
-//		// code_v4_("[12.5, 0][0].isInteger()").equals("false");
-//
-//		// section("Number.fold");
-//		// code_v4_("1234567.fold((x, y) -> x + y, 0)").equals("28");
-//		// code_v4_("1234567.fold((x, y) -> x + y, 1000)").equals("1028");
-//		// code_v4_("1234567.fold((x, y) -> x * y, 1)").equals("5040");
-//		// code_v4_("1234567.fold((x, y) -> x + y ** 2, 0)").equals("140");
 //
 //		section("Number.hypot");
-//		code_v4_("return hypot(3, 4)").equals("5");
 //		code_v4_("return hypot(3, 4)").equals("5.0");
-//		// code_v4_("return 3.hypot(4)").equals("5");
-//		code_v4_("return hypot(34, 74)").equals("81,437");
-//		code_v4_("return hypot(34, 74)").almost(81.437092286);
-//		code_v4_("return hypot([34, ''][0], 74)").equals("81,437");
-//		code_v4_("return hypot([34, ''][0], 74)").almost(81.437092286);
 //
 //		section("Number.signum");
-//		// code_v4_("0.signum()").equals("0");
-//		// code_v4_("-0.signum()").equals("0");
-//		// code_v4_("12.signum()").equals("1");
-//		// code_v4_("12.5.signum()").equals("1");
-//		// code_v4_("-12.signum()").equals("-1");
-//		// code_v4_("-12.5.signum()").equals("-1");
-//		code_v4_("return signum(0)").equals("0");
-//		code_v4_("return signum(12)").equals("1");
-//		code_v4_("return signum(-17)").equals("-1");
-//		code_v4_("return signum(-12.5)").equals("-1");
-//		code_v4_("return signum(85)").equals("1");
+//		code_v4_("return signum(0L)").equals("0");
+//		code_v4_("return signum(12L)").equals("1");
+//		code_v4_("return signum(-17L)").equals("-1");
+//		code_v4_("return signum(-12L)").equals("-1");
+//		code_v4_("return signum(85L)").equals("1");
 //
 //		section("Number.sqrt");
-//		code_v4_("return sqrt(2)").equals("1,414");
-//		code_v4_("return sqrt(2)").almost(Math.sqrt(2));
-//		// code_v4_("return sqrt(123456789123456789123456789)").equals("11111111066111");
-//		// code_v4_("return sqrt(55m ** 20m)").equals("253295162119140625");
-//		// code_v4_("return sqrt(12m + 5m)").equals("4");
-//		// code_v4_("return var n = 12; n.sqrt()").equals("3.4641016151");
-//		// code_v4_("return let f = sqrt f(5)").equals("2.2360679775");
-//		code_v4_("return sqrt(16)").equals("4");
-//		code_v4_("return sqrt(16)").equals("4.0");
-//		code_v4_("return sqrt(25)").equals("5");
-//		code_v4_("return sqrt(25)").equals("5.0");
-//
+//		code_v4_("return sqrt(2L)").equals("1.4142135623730951");
+//		
 //		section("Number.toDegrees");
-//		// code_v4_("return π.toDegrees()").equals("180");
-//		// code_v4_("return (π / 2).toDegrees()").equals("90");
-//		// code_v4_("return (-π / 2).toDegrees()").equals("-90");
-//		// code_v4_("return 0.toDegrees()").equals("0");
-//		code_v4_("return toDegrees(PI)").equals("180");
-//		code_v4_("return toDegrees(PI)").equals("180.0");
-//		code_v4_("return toDegrees(PI / 2)").equals("90");
-//		code_v4_("return toDegrees(PI / 2)").equals("90.0");
-//		code_v4_("return toDegrees(-PI / 2)").equals("-90");
-//		code_v4_("return toDegrees(-PI / 2)").equals("-90.0");
-//		code_v4_("return toDegrees(0)").equals("0");
-//		code_v4_("return toDegrees(0)").equals("0.0");
+//		code_v4_("return toDegrees(0L)").equals("0.0");
 //
 //		section("Number.toRadians");
-//		// code_v4_("return 180.toRadians()").almost(Math.PI);
-//		// code_v4_("return 90.toRadians()").almost(Math.PI / 2);
-//		// code_v4_("return (-90).toRadians()").almost(-Math.PI / 2);
-//		// code_v4_("return 0.toRadians()").equals("0");
-//		code_v4_("return toRadians(180)").equals("3,142");
-//		code_v4_("return toRadians(180)").almost(Math.PI);
-//		code_v4_("return toRadians(90)").equals("1,571");
-//		code_v4_("return toRadians(90)").almost(Math.PI / 2);
-//		code_v4_("return toRadians(-90)").equals("-1,571");
-//		code_v4_("return toRadians(-90)").almost(-Math.PI / 2);
-//		code_v4_("return toRadians(0)").equals("0");
-//		code_v4_("return toRadians(0)").equals("0.0");
+//		code_v4_("return toRadians(0L)").equals("0.0");
 //
 //		section("Number.log");
-//		// code_v4_("1.log()").equals("0");
-//		code_v4_("return log(1)").equals("0");
-//		code_v4_("return log(1)").equals("0.0");
-//		code_v4_("return log(E)").equals("1");
-//		code_v4_("return log(E)").equals("1.0");
-//		// code_v4_("123456.log()").equals("11.7236400963");
-//		code_v4_("return log(654321)").equals("13,391");
-//		code_v4_("return log(654321)").almost(13.3913533357);
-//		code_v4_("return log([55555, ''][0])").equals("10,925");
-//		code_v4_("return log([55555, ''][0])").almost(10.9251288);
+//		code_v4_("return log(1L)").equals("0.0");
 //
 //		section("Number.log10");
-//		code_v4_("return log10(10)").equals("1");
-//		code_v4_("return log10(10)").equals("1.0");
-//		// code_v4_("return 1.log10()").equals("0");
-//		// code_v4_("return 123456.log10()").equals("5.0915122016");
-//		code_v4_("return log10(654321)").equals("5,816");
-//		code_v4_("return log10(654321)").almost(5.8157908589);
-//		code_v4_("return log10([55555, ''][0])").equals("4,745");
-//		code_v4_("return log10([55555, ''][0])").almost(4.7447231519);
+//		code_v4_("return log10(10L)").equals("1.0");
 //
 //		section("Number.pow");
-//		// code_v4_("2.pow(10)").equals("1024");
-//		code_v4_("return pow(5, 3)").equals("125");
-//		code_v4_("return pow(5, 3)").equals("125.0");
-//		code_v4_("return pow(2, 10)").equals("1 024");
-//		code_v4_("return pow(2, 10)").equals("1024.0");
-//		// code_v4_("pow([10, ''][0], 5)").equals("100000");
-//		// code_v4_("3000.pow(3)").equals("2147483648");
-//		// code_v4_("return pow(3000, 3)").equals("2147483648");
-//		// code_v4_("3000l.pow(3)").equals("27000000000");
-//
-//		// section("Object-like calls");
-//		// code_v4_("(-12).abs()").equals("12");
-//		// code_v4_("π.cos()").equals("-1");
-//		// code_v4_("(π / 2).sin()").equals("1");
-//		// code_v4_("12.sqrt()").almost(3.464101615137754386);
-//		// code_v4_("12.8.floor()").equals("12");
-//		// code_v4_("-12.8.floor()").equals("-12");
-//		// code_v4_("(-12.8).floor()").equals("-13");
-//		// code_v4_("12.2.ceil()").equals("13");
-//		// code_v4_("12.8.round()").equals("13");
-//		// code_v4_("-12.8.round()").equals("-13");
-//		// code_v4_("2.pow(10)").equals("1024");
-//		// code_v4_("0.isInteger()").equals("true");
-//		// code_v4_("56.7.isInteger()").equals("false");
-//		// code_v4_("(-56.7).isInteger()").equals("false");
-//		// code_v4_("3.max(5)").equals("5");
-//		// code_v4_("5.max(3)").equals("5");
-//
-//		// section("Combinated");
-//		// code_v4_("3.max(5).min(2)").equals("2");
-//		// code_v4_("3.max(5).max(10).max(12)").equals("12");
-//		// code_v4_("10.max(5).max(8.7).max(-3.91)").equals("10");
-//		// code_v4_("10.sqrt().cos()").almost(-0.99978607287932586);
-//
-//		// section("Number.isPrime()");
-//		// code_v4_("0.isPrime()").equals("false");
-//		// code_v4_("1.isPrime()").equals("false");
-//		// code_v4_("2.isPrime()").equals("true");
-//		// code_v4_("3.isPrime()").equals("true");
-//		// code_v4_("4.isPrime()").equals("false");
-//		// code_v4_("5.isPrime()").equals("true");
-//		// code_v4_("1993.isPrime()").equals("true");
-//		// code_v4_("3972049.isPrime()").equals("false");
-//		// code_v4_("(1993l).isPrime()").equals("true");
-//		// code_v4_("4398042316799.isPrime()").equals("true");
-//		// code_v4_("(4398042316799m).isPrime() >= 1").equals("true");
-//		// code_v4_("359334085968622831041960188598043661065388726959079837.isPrime()").equals("1");
-//		// code_v4_("(146m ** 45m).isPrime()").equals("0");
-//		// code_v4_("1993l.isPrime()").equals("true");
-//		// code_v4_("1993m.isPrime()").equals("2");
-//
+//		code_v4_("return pow(5L, 3)").equals("125");
+//		code_v4_("return pow(2, 10L)").equals("1024");
+//		code_v4_("pow([10L, ''][0], 5)").equals("100000");
+//		code_v4_("pow(3000L, 3L)").equals("27000000000");
+//		code_v4_("return pow(2L, 70)").equals("1180591620717411303424");
+//		code_v4_("pow(5L, -2)").equals("0.04");
+//		
 //		section("Number.rand()");
-//		code_v4_("var a = rand() return a >= 0 and a <= 1").equals("true");
-//		code_v4_("var a = rand() return a > 1").equals("false");
-//		code_v4_("var a = randInt(2067, 2070) return a >= 2067 and a < 2070").equals("true");
-//		code_v1_3("var a = randFloat(500, 510) return a >= 500 and a < 510").equals("true");
-//		code_v4_("var a = randReal(500, 510) return a >= 500 and a < 510").equals("true");
+//		code_v4_("var a = randInt(2067L, 2070L) return a >= 2067 and a < 2070").equals("true");
+//		code_v4_("var a = randReal(500L, 510L) return a >= 500 and a < 510").equals("true");
+//
+//		section("Number.setBit()");
+//		code_v4_("setBit(3L, 70)").equals("1180591620717411303427");
+//		code_v4_("return setBit(3L, 70)").equals("1180591620717411303427");
+//		code_v4_("return setBit(3L, 70, true)").equals("1180591620717411303427");
+//		code_v4_("setBit(3L, 70L, true)").equals("1180591620717411303427");
+//		code_v4_("setBit(3L, 70L, 1)").equals("1180591620717411303427");
+//		code_v4_("setBit(3L, 70L)").equals("1180591620717411303427");
+//		code_v4_("setBit(3L, 70, false)").equals("3");
+//		code_v4_("setBit(setBit(3L, 70), 70, false)").equals("3");
+//		code_v4_("setBit(setBit(3L, 70), 1, 0)").equals("1180591620717411303425");
+//		code_v4_("setBit(3, 2, true)").equals("7");
+//		code_v4_("return setBit(3, 2)").equals("7");
+//		code_v4_("return setBit(3, 1, false)").equals("1");
+//		code_v4_("return setBit(3, 1L, 0)").equals("1");
+//		code_v4_("return setBit(3, 1, true)").equals("3");
+//		
+//		section("Number.testBit()");
+//		code_v4_("testBit(1180591620717411303427, 70)").equals("true");
+//		code_v4_("testBit(1180591620717411303427L, 69)").equals("false");
+//		code_v4_("testBit(1180591620717411303427L, 1L)").equals("true");
+//		code_v4_("testBit(3, 1)").equals("true");
+//		code_v4_("testBit(3, 0L)").equals("true");
+//		code_v4_("testBit(3, 10)").equals("false");
+//		
+//		section("Number.bitLength()");
+//		code_v4_("bitLength(1180591620717411303427)").equals("71");
+//		code_v4_("bitLength(-1180591620717411303427L)").equals("71");
+//		code_v4_("bitLength(3)").equals("2");
+//		code_v4_("bitLength(-3)").equals("64");
 //
 //		section("Number.bitCount()");
-//		code_v4_("return bitCount(0)").equals("0");
-//		code_v4_("return bitCount(0b11001110011)").equals("7");
-//		code_v4_("return bitCount(0b111100111001111)").equals("11");
-//		code_v4_("return bitCount(0xff)").equals("8");
+//		code_v4_("return bitCount(0L)").equals("0");
+//		code_v4_("return bitCount(0b11001110011L)").equals("7");
+//		code_v4_("return bitCount(0b111100111001111L)").equals("11");
+//		code_v4_("return bitCount(0xffL)").equals("8");
 //
 //		section("Number.trailingZeros()");
-//		code_v4_("return trailingZeros(0)").equals("64");
-//		code_v4_("return trailingZeros(0b00001100110000)").equals("4");
-//		code_v4_("return trailingZeros(0b100000000000)").equals("11");
-//		code_v4_("return trailingZeros(0xff00)").equals("8");
-//
-//		section("Number.leadingZeros()");
-//		code_v4_("return leadingZeros(0)").equals("64");
-//		code_v4_("return leadingZeros(0b0000110011)").equals("58");
-//		code_v4_("return leadingZeros(0b000000001)").equals("63");
-//		code_v4_("return leadingZeros(0b11111111111111111111111111111111111111111111111110000110011)").equals("5");
-//		code_v4_("return leadingZeros(0xff)").equals("56");
+//		code_v4_("return trailingZeros(0L)").equals("-1");
+//		code_v4_("return trailingZeros(0b00001100110000L)").equals("4");
+//		code_v4_("return trailingZeros(0b100000000000L)").equals("11");
+//		code_v4_("return trailingZeros(0xff00L)").equals("8");
+
+		section("Number.leadingZeros()"); // undefined for bigint, so it should be casted to int
+		code_v4_("return leadingZeros([0L][0])").equals("64");
+		code_v4_("return leadingZeros([0b0000110011L, ''][0])").equals("58");
+		code_v4_("return leadingZeros([0b0000110011, ''][0])").equals("58");
+		// TODO investigate this case
 //
 //		section("Number.bitReverse()");
 //		code_v4_("return binString(bitReverse(0))").equals("\"0\"");

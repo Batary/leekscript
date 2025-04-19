@@ -242,6 +242,11 @@ public class JavaWriter {
 				value.writeJavaCode(mainblock, this);
 				addCode(")");
 				return;
+			} else {
+				addCode("longint(");
+				value.writeJavaCode(mainblock, this);
+				addCode(")");
+				return;
 			}
 		} else if (type == Type.REAL) {
 			if (value.getType() == Type.INT) {
@@ -347,18 +352,20 @@ public class JavaWriter {
 				addCode("Object a" + a);
 			}
 			addLine(") throws LeekRunException {");
-
+			
 			// Conflicting versions ?
 			if (versions.size() > 1) {
-				var other_version = versions.get(1);
-				addCode("if (");
-				for (int a = 0; a < other_version.arguments.length; ++a) {
-					if (a > 0) addCode(" && ");
-					addCode("a" + a + " instanceof " + other_version.arguments[a].getJavaName(block.getVersion()) + " x" + a);
+				for (int i = 1; i < versions.size(); ++i) {
+					var other_version = versions.get(i);
+					addCode("if (");
+					for (int a = 0; a < other_version.arguments.length; ++a) {
+						if (a > 0) addCode(" && ");
+						addCode("a" + a + " instanceof " + other_version.arguments[a].getJavaName(block.getVersion()) + " x" + a);
+					}
+					addLine(") {");
+					writeFunctionCall(block, other_version, true);
+					addLine("}");
 				}
-				addLine(") {");
-				writeFunctionCall(block, other_version, true);
-				addLine("}");
 			}
 
 			int a = 0;

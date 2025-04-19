@@ -3,6 +3,7 @@ package leekscript.runner.values;
 import java.math.BigInteger;
 import java.util.Set;
 
+import leekscript.common.Error;
 import leekscript.runner.AI;
 import leekscript.runner.LeekRunException;
 
@@ -125,7 +126,7 @@ public class BigIntegerValue extends Number implements LeekValue {
 		m.ops();
 		return new BigIntegerValue(ai, value.mod(m.value));
 	}
-
+	
 	public BigIntegerValue shiftLeft(int n) throws LeekRunException {
 		binaryShiftOps(n);
 		return new BigIntegerValue(ai, value.shiftLeft(n));
@@ -159,22 +160,20 @@ public class BigIntegerValue extends Number implements LeekValue {
 		return new BigIntegerValue(ai, value.not());
 	}
 
-//	public BigIntegerValue andNot(BigIntegerValue val) throws LeekRunException {
-//		ops();
-//		return new BigIntegerValue(ai, value.andNot(val.value));
-//	}
-
-	// TODO ops
-	public BigIntegerValue setBit(int n) throws LeekRunException {
-		return new BigIntegerValue(ai, value.setBit(n));
-	}
-
-	public BigIntegerValue clearBit(int n) throws LeekRunException {
-		return new BigIntegerValue(ai, value.clearBit(n));
-	}
-
 	public BigIntegerValue flipBit(int n) throws LeekRunException {
 		return new BigIntegerValue(ai, value.flipBit(n));
+	}
+	
+	public BigIntegerValue setBit(int n, boolean val) throws LeekRunException {
+		if (val) {
+			return new BigIntegerValue(ai, value.setBit(n));
+		} else {
+			return new BigIntegerValue(ai, value.clearBit(n));
+		}
+	}
+	
+	public boolean testBit(int n) {
+		return value.testBit(n);
 	}
 
 	public BigIntegerValue min(BigIntegerValue val) throws LeekRunException {
@@ -204,9 +203,20 @@ public class BigIntegerValue extends Number implements LeekValue {
 	public static BigIntegerValue valueOf(AI ai, BigIntegerValue val) {
 		return val; // BigInteger is not mutable so this is safe
 	}
+	
+	public static BigIntegerValue valueOf(AI ai, Number val) throws LeekRunException {
+		if (val instanceof Double) return new BigIntegerValue(ai, (Double) val);
+		if (val instanceof Long) return new BigIntegerValue(ai, (Long) val);
+		if (val instanceof BigIntegerValue) return (BigIntegerValue) val;
+		throw new LeekRunException(Error.UNKNOWN_ERROR);
+	}
 
 	public int signum() {
 		return value.signum();
+	}
+
+	public long bitLength() {
+		return value.bitLength();
 	}
 
 	public long bitCount() {
@@ -272,7 +282,6 @@ public class BigIntegerValue extends Number implements LeekValue {
 	}
 
 	private void ops(int nb) throws LeekRunException {
-//		int size = (int) (Math.log(value.bitLength()) / Math.log(2));
 		int size = (int) (value.bitLength() / 1000);
 		ai.ops(nb + size);
 	}

@@ -35,11 +35,15 @@ public class LeekFunctions {
 		method("min", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.REAL, new Type[] { Type.REAL, Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.INT, Type.BIG_INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.INT }),
 			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.BIG_INT }),
 		});
 		method("max", "Number", 2, true, new CallableVersion[] {
 			new CallableVersion(Type.REAL, new Type[] { Type.REAL, Type.REAL }),
 			new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.INT, Type.BIG_INT }),
+			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.INT }),
 			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.BIG_INT }),
 		});
 		method("cos", "Number", 30, true, Type.REAL, new Type[] { Type.REAL });
@@ -66,22 +70,55 @@ public class LeekFunctions {
 			new CallableVersion(Type.INT, new Type[] { Type.INT }),
 			new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT }),
 		});
+		
+		//TODO
+		
 		method("sqrt", "Number", 8, true, Type.REAL, new Type[] { Type.REAL });
 		method("cbrt", "Number", 62, true, Type.REAL, new Type[] { Type.REAL });
 		method("log", "Number", 39, true, Type.REAL, new Type[] { Type.REAL });
 		method("log2", "Number", 23, true, Type.REAL, new Type[] { Type.REAL });
 		method("log10", "Number", 23, true, Type.REAL, new Type[] { Type.REAL });
 		method("exp", "Number", 40, true, Type.REAL, new Type[] { Type.REAL });
-		method("pow", "Number", 140, true, Type.REAL, new Type[] { Type.REAL, Type.REAL });
+		method("pow", "Number", 140, true, new CallableVersion[] {
+				new CallableVersion(Type.REAL, new Type[] { Type.REAL, Type.REAL }),
+				new CallableVersion(Type.ANY, new Type[] { Type.BIG_INT, Type.INT }),
+				new CallableVersion(Type.ANY, new Type[] { Type.BIG_INT, Type.BIG_INT }),
+			});
 		method("rand", "Number", 30, true, Type.REAL, new Type[0]);
 		method("randInt", "Number", 30, true, Type.INT, new Type[] { Type.INT, Type.INT });
 		method("randFloat", "Number", 30, true, Type.REAL, new Type[] { Type.REAL, Type.REAL }).setMaxVersion(3, "randReal");
 		method("randReal", "Number", 30, true, Type.REAL, new Type[] { Type.REAL, Type.REAL });
 		method("hypot", "Number", 187, true, Type.REAL, new Type[] { Type.REAL, Type.REAL });
-		method("signum", "Number", 2, true, Type.INT, new Type[] { Type.REAL });
-		method("bitCount", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
-		method("trailingZeros", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
-		method("leadingZeros", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
+		method("signum", "Number", 2, true, new CallableVersion[] {
+				new CallableVersion(Type.INT, new Type[] { Type.INT }),
+				new CallableVersion(Type.INT, new Type[] { Type.REAL }),
+				new CallableVersion(Type.INT, new Type[] { Type.BIG_INT }),
+			});
+		method("setBit", "Number", 1, true, new CallableVersion[] {
+				new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT }),
+				new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT, Type.INT }),
+				new CallableVersion(Type.INT, new Type[] { Type.INT, Type.INT, Type.BOOL }),
+				new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.INT }),
+				new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.INT, Type.INT }),
+				new CallableVersion(Type.BIG_INT, new Type[] { Type.BIG_INT, Type.INT, Type.BOOL }),
+		}).setMinVersion(4);
+		method("testBit", "Number", 1, true, new CallableVersion[] {
+				new CallableVersion(Type.BOOL, new Type[] { Type.INT, Type.INT }),
+				new CallableVersion(Type.BOOL, new Type[] { Type.BIG_INT, Type.INT }),
+		}).setMinVersion(4);
+		method("bitLength", "Number", 1, true, new CallableVersion[] {
+				new CallableVersion(Type.INT, new Type[] { Type.INT }),
+				new CallableVersion(Type.INT, new Type[] { Type.BIG_INT }),
+		}).setMinVersion(4);
+		method("bitCount", "Number", 1, true, new CallableVersion[] {
+				new CallableVersion(Type.INT, new Type[] { Type.INT }),
+				new CallableVersion(Type.INT, new Type[] { Type.BIG_INT }),
+			}).setMinVersion(4);
+		method("trailingZeros", "Number", 1, true, new CallableVersion[] {
+				new CallableVersion(Type.INT, new Type[] { Type.INT }),
+				new CallableVersion(Type.INT, new Type[] { Type.BIG_INT }),
+			}).setMinVersion(4);
+		method("leadingZeros", "Number", 1, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
 		method("bitReverse", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
 		method("byteReverse", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
 		method("rotateLeft", "Number", 1, true, Type.INT, new Type[] { Type.INT, Type.INT }).setMinVersion(4);

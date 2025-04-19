@@ -846,6 +846,11 @@ public class LeekExpression extends Expression {
 			writer.getBoolean(mainblock, mExpression2);
 			return;
 		case Operators.BITNOT:
+			if (type.isPrimitive()) {
+				writer.addCode("(" + type.getJavaPrimitiveName(mainblock.getVersion()) + ") ");
+			} else {
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") ");
+			}
 			writer.addCode("bnot(");
 			mExpression2.writeJavaCode(mainblock, writer);
 			writer.addCode(")");
@@ -855,7 +860,7 @@ public class LeekExpression extends Expression {
 				writer.addCode("-");
 				mExpression2.writeJavaCode(mainblock, writer);
 			} else {
-				writer.addCode("minus(");
+				writer.addCode("(" + type.getJavaName(mainblock.getVersion()) + ") minus(");
 				mExpression2.writeJavaCode(mainblock, writer);
 				writer.addCode(")");
 			}
@@ -957,8 +962,6 @@ public class LeekExpression extends Expression {
 			writer.addCode(")");
 			return;
 		case Operators.AS:
-			System.out.println(mExpression1.getType().getJavaName(4) + " as " + mExpression2.getType().getJavaName(4));
-			System.out.println("a");
 			if (mExpression2.getType() == Type.BIG_INT) {
 				writer.addCode("BigIntegerValue.valueOf(" + writer.getAIThis() + ", ");
 				mExpression1.writeJavaCode(mainblock, writer);
@@ -1206,12 +1209,10 @@ public class LeekExpression extends Expression {
 		} else if (mOperator == Operators.NOT || mOperator == Operators.EQUALS_EQUALS || mOperator == Operators.LESS || mOperator == Operators.MORE || mOperator == Operators.MOREEQUALS || mOperator == Operators.LESSEQUALS || mOperator == Operators.EQUALS || mOperator == Operators.AND || mOperator == Operators.OR || mOperator == Operators.XOR || mOperator == Operators.NOTEQUALS || mOperator == Operators.NOT_EQUALS_EQUALS || mOperator == Operators.INSTANCEOF || mOperator == Operators.IN) {
 			type = Type.BOOL;
 		}
-		else if (mOperator == Operators.BITAND || mOperator == Operators.BITNOT || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR || mOperator == Operators.SHIFT_LEFT || mOperator == Operators.SHIFT_RIGHT || mOperator == Operators.SHIFT_UNSIGNED_RIGHT) {
-//			if (mExpression1.getType() == Type.BIG_INT || mExpression2.getType() == Type.BIG_INT) {
-//				type = Type.BIG_INT;
-//			} else {
-//				type = Type.INT;
-//			}
+		else if (mOperator == Operators.SHIFT_LEFT || mOperator == Operators.SHIFT_RIGHT || mOperator == Operators.SHIFT_UNSIGNED_RIGHT) {
+			type = mExpression1.getType().shift(mExpression2.getType());
+		}
+		else if (mOperator == Operators.BITAND || mOperator == Operators.BITNOT || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR) {
 			type = mExpression1.getType().binop(mExpression2.getType());
 		}
 		else if (mOperator == Operators.ADD) {
@@ -1221,7 +1222,7 @@ public class LeekExpression extends Expression {
 			type = mExpression1.getType().sub(mExpression2.getType());
 		}
 		else if (mOperator == Operators.MODULUS) {
-			type = mExpression1.getType().mul(mExpression2.getType());
+			type = mExpression1.getType().mod(mExpression2.getType());
 		}
 		else if (mOperator == Operators.MULTIPLIE) {
 			type = mExpression1.getType().mul(mExpression2.getType());

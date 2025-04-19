@@ -467,8 +467,24 @@ public class Type {
 		}
 		if (this == Type.BIG_INT && type == Type.NULL) return Type.REAL;
 		if (this == Type.BIG_INT && (type.isNumber() || type == Type.BOOL) 
-				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.BIG_INT;
+				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.ANY;
 		if ((this.isNumber() || this == Type.BOOL) && (type.isNumber() || type == Type.BOOL)) return Type.REAL;
+
+		return Type.ANY;
+	}
+	
+	public Type mod(Type type) {
+
+		if (this instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> t.mod(type)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		if (type instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> this.mod(t)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		if (type == Type.NULL) return Type.REAL;
+		if (this == Type.BIG_INT && (type.isNumber() || type == Type.BOOL) 
+				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.ANY;
+		if ((this.isNumber() || this == Type.BOOL) && (type.isNumber() || type == Type.BOOL)) return Type.INT;
 
 		return Type.ANY;
 	}
@@ -483,7 +499,7 @@ public class Type {
 		}
 		if (this == Type.BIG_INT && type == Type.NULL) return Type.REAL;
 		if (this == Type.BIG_INT && (type.isNumber() || type == Type.BOOL) 
-				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.BIG_INT;
+				|| type == Type.BIG_INT && (this.isNumber() || this == Type.BOOL)) return Type.ANY;
 		if ((this.isNumber() || this == Type.BOOL) && (type.isNumber() || type == Type.BOOL)) return Type.INT;
 
 		return Type.ANY;
@@ -499,11 +515,25 @@ public class Type {
 		}
 
 		if (this == Type.BIG_INT && (type.isNumber() || type == Type.BOOL || type == Type.NULL)
-				|| (this.isNumber() || this == Type.BOOL || this == Type.NULL) && type == Type.BIG_INT) return Type.BIG_INT;
+				|| (this.isNumber() || this == Type.BOOL || this == Type.NULL) && type == Type.BIG_INT) return Type.ANY;
 		if ((this == Type.INT || this == Type.BOOL || this == Type.NULL) && (type == Type.INT || type == Type.BOOL || type == Type.NULL)) return Type.INT;
 		if ((this.isNumber() || this == Type.BOOL || this == Type.NULL) && (type.isNumber() || type == Type.BOOL || type == Type.NULL)) return Type.REAL;
 
 		return Type.ANY;
+	}
+	
+	public Type shift(Type type) {
+		if (this instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> t.shift(type)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		if (type instanceof CompoundType ct) {
+			return Type.compound(ct.getTypes().stream().map(t -> this.shift(t)).collect(Collectors.toCollection(HashSet::new)));
+		}
+		
+		if (this == Type.BIG_INT) {
+			return Type.BIG_INT;
+		}
+		return Type.INT;
 	}
 	
 	public Type binop(Type type) {
