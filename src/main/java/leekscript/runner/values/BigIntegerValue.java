@@ -204,11 +204,12 @@ public class BigIntegerValue extends Number implements LeekValue {
 		return val; // BigInteger is not mutable so this is safe
 	}
 	
-	public static BigIntegerValue valueOf(AI ai, Number val) throws LeekRunException {
+	public static BigIntegerValue valueOf(AI ai, Object val) throws LeekRunException {
 		if (val instanceof Double) return new BigIntegerValue(ai, (Double) val);
 		if (val instanceof Long) return new BigIntegerValue(ai, (Long) val);
 		if (val instanceof BigIntegerValue) return (BigIntegerValue) val;
-		throw new LeekRunException(Error.UNKNOWN_ERROR);
+		if (val instanceof String) return new BigIntegerValue(ai, (String) val);
+		throw new LeekRunException(Error.IMPOSSIBLE_CAST);
 	}
 
 	public int signum() {

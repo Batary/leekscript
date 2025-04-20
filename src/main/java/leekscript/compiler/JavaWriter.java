@@ -199,15 +199,15 @@ public class JavaWriter {
 
 		 System.out.println("convert " + value.getType().getJavaName(4) + " to " + type.getJavaName(4));
 		if (type == Type.REAL && value.getType().isCompoundNumber()) {
-			addCode("(");
+			addCode("((Number) (");
 			value.writeJavaCode(mainblock, this);
-			addCode(").doubleValue()");
+			addCode(")).doubleValue()");
 			return;
 		}
 		if (type == Type.INT && value.getType().isCompoundNumber()) {
-			addCode("(");
+			addCode("((Number) (");
 			value.writeJavaCode(mainblock, this);
-			addCode(").longValue()");
+			addCode(")).longValue()");
 			return;
 		}
 		if (type == Type.BIG_INT && value.getType().isNumber()) {
@@ -260,6 +260,11 @@ public class JavaWriter {
 				addCode(")");
 				return;
 			}
+		} else if (type == Type.BIG_INT) {
+			addCode("bigint(");
+			value.writeJavaCode(mainblock, this);
+			addCode(")");
+			return;
 		}
 		// int?, real?, big_integer?
 		if (type instanceof CompoundType ct) {

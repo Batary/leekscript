@@ -700,6 +700,9 @@ public abstract class AI {
 					|| y instanceof Double && (((Double) y).isNaN() || ((Double) y).isInfinite())) {
 					return false;
 				}
+				if (x instanceof Double || y instanceof Double) {
+					return real(x) == real(y);
+				}
 				return bigint(x).equals(bigint(y));
 			}
 			var n = ((Number) x).doubleValue();

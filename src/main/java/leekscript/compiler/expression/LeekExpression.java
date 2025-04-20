@@ -1212,8 +1212,17 @@ public class LeekExpression extends Expression {
 		else if (mOperator == Operators.SHIFT_LEFT || mOperator == Operators.SHIFT_RIGHT || mOperator == Operators.SHIFT_UNSIGNED_RIGHT) {
 			type = mExpression1.getType().shift(mExpression2.getType());
 		}
-		else if (mOperator == Operators.BITAND || mOperator == Operators.BITNOT || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR) {
+		else if (mOperator == Operators.BITAND || mOperator == Operators.BITOR  || mOperator == Operators.BITXOR) {
 			type = mExpression1.getType().binop(mExpression2.getType());
+		}
+		else if (mOperator == Operators.BITNOT) {
+			if (mExpression1.getType() == Type.BIG_INT) {
+				type = Type.BIG_INT;
+			} else if (mExpression1.getType() == Type.INT) {
+				type = Type.INT;
+			} else {
+				type = Type.ANY;
+			}
 		}
 		else if (mOperator == Operators.ADD) {
 			type = mExpression1.getType().add(mExpression2.getType());

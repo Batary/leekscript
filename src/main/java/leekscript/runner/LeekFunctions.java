@@ -118,13 +118,19 @@ public class LeekFunctions {
 				new CallableVersion(Type.INT, new Type[] { Type.INT }),
 				new CallableVersion(Type.INT, new Type[] { Type.BIG_INT }),
 			}).setMinVersion(4);
-		method("leadingZeros", "Number", 1, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
+		method("leadingZeros", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
 		method("bitReverse", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
 		method("byteReverse", "Number", 1, true, Type.INT, new Type[] { Type.INT }).setMinVersion(4);
 		method("rotateLeft", "Number", 1, true, Type.INT, new Type[] { Type.INT, Type.INT }).setMinVersion(4);
 		method("rotateRight", "Number", 1, true, Type.INT, new Type[] { Type.INT, Type.INT }).setMinVersion(4);
-		method("binString", "Number", 10, true, Type.STRING, new Type[] { Type.INT }).setMinVersion(4);
-		method("hexString", "Number", 10, true, Type.STRING, new Type[] { Type.INT }).setMinVersion(4);
+		method("binString", "Number", 10, true, new CallableVersion[] {
+				new CallableVersion(Type.STRING, new Type[] { Type.INT }),
+				new CallableVersion(Type.STRING, new Type[] { Type.BIG_INT }),
+			}).setMinVersion(4);
+		method("hexString", "Number", 10, true, new CallableVersion[] {
+				new CallableVersion(Type.STRING, new Type[] { Type.INT }),
+				new CallableVersion(Type.STRING, new Type[] { Type.BIG_INT }),
+			}).setMinVersion(4);
 		method("realBits", "Number", 1, true, Type.INT, new Type[] { Type.REAL }).setMinVersion(4);
 		method("bitsToReal", "Number", 1, true, Type.REAL, new Type[] { Type.INT }).setMinVersion(4);
 		method("isFinite", "Number", 1, true, Type.BOOL, new Type[] { Type.REAL }).setMinVersion(4);
