@@ -13,7 +13,4 @@ for (var k in [0..10000]) {
     acc |= walkable & (arr << 64 | arr >> 64 | arr >> 1 | arr << 1);
 }
 
-//integer ret = acc as Integer;
-//return ret;
 return acc as integer;
-//return acc & 0b1111111111111111111111111111111111111111111111111111111111111111;

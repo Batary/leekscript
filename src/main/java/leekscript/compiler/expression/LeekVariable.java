@@ -595,7 +595,59 @@ public class LeekVariable extends Expression {
 
 	@Override
 	public void compileAddEq(MainLeekBlock mainblock, JavaWriter writer, Expression expr, Type t) {
-		compileEq(mainblock, writer, expr, "add", "+=");
+			if (type == VariableType.FIELD) {
+				writer.addCode(token.getWord() + " = ");
+				if (this.variable.getType() != Type.ANY) {
+					writer.addCode("((" + this.variable.getType().getJavaName(mainblock.getVersion()) + ") ");
+					writer.addCode("add(" + token.getWord() + ", ");
+					expr.writeJavaCode(mainblock, writer);
+					writer.addCode("))");
+				} else {
+					writer.addCode("add(" + token.getWord() + ", ");
+					expr.writeJavaCode(mainblock, writer);
+					writer.addCode(")");
+				}
+			} else if (type == VariableType.STATIC_FIELD) {
+				writer.addCode(mainblock.getWordCompiler().getCurrentClassVariable() + ".field_add_eq(\""
+						+ token.getWord() + "\", ");
+				expr.writeJavaCode(mainblock, writer);
+				writer.addCode(")");
+			} else {
+				String prefix = (type == VariableType.GLOBAL ? "g_": "u_");
+				if (isBox()) {
+					writer.addCode(prefix + token.getWord() + ".add_eq(");
+					expr.writeJavaCode(mainblock, writer);
+					writer.addCode(")");
+				} else if (this.variableType.isPrimitiveNumber()) {
+					writer.addCode(prefix + token.getWord() + " += ");
+					if (expr.getType().isPrimitiveNumber()) {
+						expr.writeJavaCode(mainblock, writer);
+					} else {
+						if (this.variableType == Type.INT) {
+							writer.addCode("longint(");
+							expr.writeJavaCode(mainblock, writer);
+							writer.addCode(")");
+						} else if (this.variableType == Type.REAL) {
+							writer.addCode("real(");
+							expr.writeJavaCode(mainblock, writer);
+							writer.addCode(")");						
+						}
+					}
+				} else {
+					writer.addCode(prefix + token.getWord() + " = ");
+					if (this.variable.getType() != Type.ANY) {
+						writer.addCode("((" + this.variable.getType().getJavaName(mainblock.getVersion()) + ") ");
+						writer.addCode("add_eq(" + prefix + token.getWord() + ", ");
+						expr.writeJavaCode(mainblock, writer);
+						writer.addCode("))");
+					} else {
+						writer.addCode("add_eq(" + prefix + token.getWord() + ", ");
+						expr.writeJavaCode(mainblock, writer);
+						writer.addCode(")");
+					}
+				}
+			}
+		
 	}
 
 	@Override

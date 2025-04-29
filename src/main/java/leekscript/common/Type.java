@@ -532,8 +532,10 @@ public class Type {
 		
 		if (this == Type.BIG_INT) {
 			return Type.BIG_INT;
+		}else if (this == Type.INT) {
+			return Type.INT;
 		}
-		return Type.INT;
+		return Type.ANY;
 	}
 	
 	public Type binop(Type type) {
@@ -546,8 +548,10 @@ public class Type {
 		
 		if (this == Type.BIG_INT || type == Type.BIG_INT) {
 			return Type.BIG_INT;
+		} else if (this == Type.INT && type == Type.INT) {
+			return Type.INT;
 		}
-		return Type.INT;
+		return Type.ANY;
 	}
 
 	public boolean isWarning() {

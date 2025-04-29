@@ -11,6 +11,7 @@ import leekscript.AILog;
 import leekscript.runner.AI;
 import leekscript.runner.LeekOperations;
 import leekscript.runner.LeekRunException;
+import leekscript.runner.RamUsage;
 import leekscript.common.AccessLevel;
 import leekscript.common.Error;
 
@@ -19,10 +20,12 @@ public class ObjectLeekValue implements LeekValue {
 	public final ClassLeekValue clazz;
 	public final int id;
 	public final LinkedHashMap<String, ObjectVariableValue> fields = new LinkedHashMap<>();
+	private final RamUsage ram;
 
-	public ObjectLeekValue(AI ai, ClassLeekValue clazz) {
+	public ObjectLeekValue(AI ai, ClassLeekValue clazz) throws LeekRunException {
 		this.clazz = clazz;
 		this.id = ai.getNextObjectID();
+		this.ram = ai.allocateRAM(this, 0);
 	}
 
 	public ObjectLeekValue(AI ai, String[] keys, Object[] values) throws LeekRunException {
@@ -42,12 +45,12 @@ public class ObjectLeekValue implements LeekValue {
 				fields.put(field.getKey(), new ObjectVariableValue(ai, LeekOperations.clone(ai, field.getValue().get(), level - 1), field.getValue().level, field.getValue().isFinal));
 			}
 		}
-		ai.increaseRAM(2 * value.fields.size());
+		ram.add(2 * value.fields.size());
 	}
 
 	public void addField(AI ai, String field, Object value, AccessLevel level, boolean isFinal) throws LeekRunException {
 		fields.put(field, new ObjectVariableValue(ai, value, level, isFinal));
-		ai.increaseRAM(2);
+		ai.increaseRAM(ram, 2);
 	}
 
 	public Object getField(String field) throws LeekRunException {
@@ -569,12 +572,12 @@ public class ObjectLeekValue implements LeekValue {
 		return sb.toString();
 	}
 
-	@Override
-	@SuppressWarnings("deprecated")
-	protected void finalize() throws Throwable {
-		super.finalize();
-		clazz.ai.decreaseRAM(2 * size());
-	}
+//	@Override
+//	@SuppressWarnings("deprecated")
+//	protected void finalize() throws Throwable {
+//		super.finalize();
+//		clazz.ai.decreaseRAM(2 * size());
+//	}
 
 	@Override
 	public int hashCode() {

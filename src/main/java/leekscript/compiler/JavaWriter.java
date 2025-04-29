@@ -197,7 +197,7 @@ public class JavaWriter {
 
 	public void compileConvert(MainLeekBlock mainblock, int index, Expression value, Type type) {
 
-		 System.out.println("convert " + value.getType().getJavaName(4) + " to " + type.getJavaName(4));
+//		 System.out.println("convert " + value.getType().getJavaName(4) + " to " + type.getJavaName(4));
 		if (type == Type.REAL && value.getType().isCompoundNumber()) {
 			addCode("((Number) (");
 			value.writeJavaCode(mainblock, this);

@@ -26,6 +26,8 @@ import leekscript.common.Type;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -69,9 +72,13 @@ public abstract class AI {
 	public final static int MAX_OPERATIONS = 20_000_000;
 	public long maxOperations = MAX_OPERATIONS;
 
-	protected long mRAM = 0;
+	protected volatile long mRAM = 0;
 	public final static int MAX_RAM = 12_500_000; // in 64 bits "quads" = 100 Mo
 	public long maxRAM = MAX_RAM;
+
+	// references to objects in memory
+	private ReferenceQueue<Object> referenceQueue = new ReferenceQueue<>();
+	private List<LeekReference> references = new ArrayList<>();
 
 	protected TreeMap<Integer, LineMapping> mLinesMapping = new TreeMap<>();
 	protected String thisObject = null;
@@ -110,9 +117,11 @@ public abstract class AI {
 	public class NativeObjectLeekValue implements LeekValue {
 
 		private int id;
+		private RamUsage ram;
 
-		public NativeObjectLeekValue() {
+		public NativeObjectLeekValue() throws LeekRunException {
 			this.id = AI.this.getNextObjectID();
+			this.ram = AI.this.allocateRAM(this, size() * 2);
 		}
 
 		@Override
@@ -236,12 +245,12 @@ public abstract class AI {
 			return o;
 		}
 
-		@Override
-		@SuppressWarnings("deprecated")
-		protected void finalize() throws Throwable {
-			super.finalize();
-			decreaseRAM(2 * size());
-		}
+//		@Override
+//		@SuppressWarnings("deprecated")
+//		protected void finalize() throws Throwable {
+//			super.finalize();
+//			decreaseRAM(2 * size());
+//		}
 	}
 
 	public AI(int instructions, int version) {
@@ -349,6 +358,11 @@ public abstract class AI {
 		// } catch (InterruptedException e) {
 		// 	e.printStackTrace();
 		// }
+		Reference<?> referenceFromQueue;
+		while ((referenceFromQueue = referenceQueue.poll()) != null) {
+		    ((LeekReference)referenceFromQueue).finalizeResources(this);
+		    referenceFromQueue.clear();
+		}
 		return mRAM;
 	}
 
@@ -409,29 +423,96 @@ public abstract class AI {
 	public void increaseRAMDirect(int ram) {
 		mRAM += ram;
 	}
+	
+	public RamUsage allocateRAM(Object obj, int ram) throws LeekRunException {
+		RamUsage ramRef = new RamUsage(ram);
+		// subscribe object to the referenceQueue
+		references.add(new LeekReference(ramRef, obj, referenceQueue));
 
-	public void increaseRAM(int ram) throws LeekRunException {
 		mRAM += ram;
+		checkRamOverflow();
+		
+	    return ramRef;
+	}
+	
+	public void increaseRAM(RamUsage ramRef, int value) throws LeekRunException {
+		mRAM += value;
+		ramRef.add(value);
+		checkRamOverflow();
+	}
+	
+	private void checkRamOverflow() throws LeekRunException {
+//		System.out.println(mRAM);
 		if (mRAM > maxRAM) {
-			// System.out.println("RAM before = " + mRAM);
 			long ramBefore = mRAM;
-			System.gc();
-			try {
-				Thread.sleep(0, 1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			
+			// update memory usage if garbage collector has already passed (call to gc is very expensive)
+			Reference<?> referenceFromQueue;
+			while ((referenceFromQueue = referenceQueue.poll()) != null) {
+			    ((LeekReference)referenceFromQueue).finalizeResources(this);
+			    referenceFromQueue.clear();
 			}
-			Runtime.getRuntime().runFinalization();
-			// System.out.println("RAM after  = " + mRAM);
+			
 			if (mRAM > maxRAM) {
-				getLogs().addLog(AILog.WARNING, "[RAM error] RAM before: " + ramBefore + " RAM after: " + mRAM);
-				throw new LeekRunException(Error.OUT_OF_MEMORY);
+				System.gc();
+				
+				for (int i = 100; i > 0 && mRAM > maxRAM; i--) {
+					try {
+						// wait a bit to let garbage collector run
+						Thread.sleep(0, 10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					while ((referenceFromQueue = referenceQueue.poll()) != null) {
+					    ((LeekReference)referenceFromQueue).finalizeResources(this);
+					    referenceFromQueue.clear();
+					}
+				}
+				System.out.println("[RAM error] RAM before: " + ramBefore + " RAM after: " + (mRAM));
+				if (mRAM > maxRAM) {
+					getLogs().addLog(AILog.WARNING, "[RAM error] RAM before: " + ramBefore + " RAM after: " + mRAM);
+					throw new LeekRunException(Error.OUT_OF_MEMORY);
+					// TODO check try/catches in constructors
+				}
 			}
 		}
 	}
+//	
+//	
+//	public void increaseRAM(int ram) throws LeekRunException {
+//		mRAM += ram;
+////		System.out.println("Current RAM = " + mRAM);
+//		if (mRAM > maxRAM) {
+////			System.out.println("RAM before = " + mRAM);
+//			long ramBefore = mRAM;
+//			System.gc();
+////			Runtime.getRuntime().runFinalization();
+//			try {
+//				for (int i = 100000; i > 0 && mRAM > maxRAM; i--) {
+////				    Thread.sleep(1000);
+//					Thread.onSpinWait();
+//					Thread.sleep(0, 10);
+//				}
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+////			System.out.println("RAM after  = " + mRAM);
+//			if (mRAM > maxRAM) {
+//				getLogs().addLog(AILog.WARNING, "[RAM error] RAM before: " + ramBefore + " RAM after: " + mRAM);
+//				throw new LeekRunException(Error.OUT_OF_MEMORY);
+//			}
+////			System.out.println("RAM after  = " + mRAM);
+//		}
+//	}
 
-	public void decreaseRAM(int ram) {
-		mRAM -= ram;
+	public void decreaseRAM(RamUsage ramRef, int value) {
+		mRAM -= value;
+		ramRef.remove(value);
+	}
+	
+	public void freeRAM(LeekReference ref, int value) {
+		mRAM -= value;
+		references.remove(ref);
 	}
 
 	protected void nothing(Object obj) {
@@ -607,7 +688,8 @@ public abstract class AI {
 			case "java.lang.Long.longValue()":
 				return "integer";
 			case "big_integer":
-			case "leekscript.runner.values.BigIntegerValue": return "big_integer";
+			case "leekscript.runner.values.BigIntegerValue": 
+				return "big_integer";
 			case "double":
 			case "java.lang.Double":
 			case "java.lang.Double.doubleValue()":
@@ -3401,7 +3483,7 @@ public abstract class AI {
 		return new RealIntervalLeekValue(this);
 	}
 
-	public ObjectLeekValue new_objectClass() {
+	public ObjectLeekValue new_objectClass() throws LeekRunException {
 		return new ObjectLeekValue(this, this.objectClass);
 	}
 

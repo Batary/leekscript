@@ -1,8 +1,10 @@
 package leekscript.runner.values;
 
+import java.lang.ref.Cleaner;
 import java.math.BigInteger;
 import java.util.Set;
 
+import leekscript.AILog;
 import leekscript.common.Error;
 import leekscript.runner.AI;
 import leekscript.runner.LeekRunException;
@@ -15,61 +17,112 @@ import leekscript.runner.LeekRunException;
  * 
  * @see BigInteger
  */
-public class BigIntegerValue extends Number implements LeekValue {
+public class BigIntegerValue extends Number implements LeekValue/*, AutoCloseable*/ {
 
-	private BigInteger value;
+	private final BigInteger value;
 	private final AI ai;
-
-	private BigIntegerValue(AI ai) throws LeekRunException {
-		this.ai = ai;
-	}
+//	private static final Cleaner cleaner = Cleaner.create();
+//    private final Cleaner.Cleanable cleanableInstance;
+//    
+//    static class State implements Runnable {
+//    	private final int ram;
+//    	private final AI ai;
+//    	
+//        State(AI ai, int ram) {
+//            // initialize State needed for cleaning action
+//        	this.ai = ai;
+//        	this.ram = ram;
+//        }
+//
+//        public void run() {
+//            // cleanup action accessing State, executed at most once
+//        	ai.decreaseRAM(ram);
+////        	System.out.println("Release " + ram);
+//        }
+//    }
+//
+//    private final State state;
 
 	public BigIntegerValue(AI ai, String val, int radix) throws LeekRunException {
-		this(ai);
-		value = new BigInteger(val, radix);
-		increaseRAM();
+		this.ai = ai;
+		this.value = new BigInteger(val, radix);
 		ops(4);
+		int ram = value.bitLength() / 64;
+//		ai.increaseRAM(ram);
+		ai.allocateRAM(this, ram);
+//		this.state = new State(ai, ram);
+//		this.cleanableInstance = cleaner.register(this, state);
 	}
 
 	public BigIntegerValue(AI ai, String val) throws LeekRunException {
-		this(ai);
-		value = new BigInteger(val);
-		increaseRAM();
+		this.ai = ai;
+		this.value = new BigInteger(val);
 		ops(4);
+		int ram = value.bitLength() / 64;
+//		ai.increaseRAM(ram);
+		ai.allocateRAM(this, ram);
+//		this.state = new State(ai, ram);
+//		this.cleanableInstance = cleaner.register(this, state);
 	}
 
 	public BigIntegerValue(AI ai, double val) throws LeekRunException {
-		this(ai);
-		value = BigInteger.valueOf((long) val);
-		increaseRAM();
+		this.ai = ai;
+		this.value = BigInteger.valueOf((long) val);
 		ops(4);
+		int ram = value.bitLength() / 64;
+//		ai.increaseRAM(ram);
+		ai.allocateRAM(this, ram);
+//		this.state = new State(ai, ram);
+//		this.cleanableInstance = cleaner.register(this, state);
 	}
 
 	public BigIntegerValue(AI ai, long val) throws LeekRunException {
-		this(ai);
-		value = BigInteger.valueOf(val);
-		increaseRAM();
+		this.ai = ai;
+		this.value = BigInteger.valueOf(val);
 		ops(4);
+		int ram = value.bitLength() / 64;
+//		ai.increaseRAM(ram);
+		ai.allocateRAM(this, ram);
+//		this.state = new State(ai, ram);
+//		this.cleanableInstance = cleaner.register(this, state);
 	}
 
 	public BigIntegerValue(AI ai, BigInteger val) throws LeekRunException {
-		this(ai);
-		value = val;
-		increaseRAM();
+		this.ai = ai;
+		this.value = val;
 		ops(4);
+		int ram = value.bitLength() / 64;
+//		ai.increaseRAM(ram);
+		ai.allocateRAM(this, ram);
+//		this.state = new State(ai, ram);
+//		this.cleanableInstance = cleaner.register(this, state);
 	}
+	
+//	public void close() {
+//		cleanableInstance.clean();
+//    }
 
-	private void increaseRAM() throws LeekRunException {
-		ai.increaseRAM(value.bitLength() / 64);
-	}
-
-	// TODO this causes significant performance loss, better handling might help
-	@Override
-	@SuppressWarnings("deprecated")
-	protected void finalize() throws Throwable {
-		super.finalize();
-		ai.decreaseRAM(value.bitLength() / 64);
-	}
+//
+//	private void increaseRAM() throws LeekRunException {
+//		ai.increaseRAM(value.bitLength() / 64);
+//	}
+//
+	
+	// benchmarks :
+	// nothing : 20s
+	// finalize : 60s
+	// phantomRef : 25s
+	// cleaner : 40s
+	// cleaner + autocloseable : 45s
+	// weak reference : 25s
+	
+//	// TODO this causes significant performance loss, better handling might help
+//	@Override
+//	@SuppressWarnings("deprecated")
+//	protected void finalize() throws Throwable {
+//		super.finalize();
+//		ai.decreaseRAM(value.bitLength() / 64);
+//	}
 
 	public BigIntegerValue add(BigIntegerValue val) throws LeekRunException {
 		ops();
@@ -209,7 +262,8 @@ public class BigIntegerValue extends Number implements LeekValue {
 		if (val instanceof Long) return new BigIntegerValue(ai, (Long) val);
 		if (val instanceof BigIntegerValue) return (BigIntegerValue) val;
 		if (val instanceof String) return new BigIntegerValue(ai, (String) val);
-		throw new LeekRunException(Error.IMPOSSIBLE_CAST);
+		ai.getLogs().addLog(AILog.ERROR, "Cannot cast \"" + val.toString() + "\" to BigInteger");
+		return new BigIntegerValue(ai, 0);
 	}
 
 	public int signum() {

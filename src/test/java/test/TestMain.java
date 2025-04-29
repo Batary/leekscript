@@ -25,13 +25,13 @@ public class TestMain {
 		// new TestCommon().code_v4("var a = [1, 2, 3] return count(a)").equals("3");
 
 //		new TestGeneral().run();
-		new TestBigInt().run();
 //		new TestNumber().run();
+		new TestBigInt().run();
 //		new TestBoolean().run();
 //		new TestString().run();
 //		new TestSet().run();
 //		new TestArray().run();
-//		new TestArrayStress().run();
+		new TestArrayStress().run();
 //		new TestMap().run();
 //		new TestMapStress().run();
 //		new TestInterval().run();
@@ -48,7 +48,7 @@ public class TestMain {
 //		new TestSystem().run();
 //		new TestJSON().run();
 //		new TestOperations().run();
-		new TestFiles().run();
+//		new TestFiles().run();
 //		new TestEuler().run();
 
 		// TestCommon.ouputOperationsFile();

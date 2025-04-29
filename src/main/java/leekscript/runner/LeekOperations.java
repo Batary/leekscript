@@ -17,7 +17,6 @@ public class LeekOperations {
 	}
 
 	public static Object clone(AI ai, Object value, int level) throws LeekRunException {
-		// TODO bigint
 		if (value instanceof LegacyArrayLeekValue) {
 			if (level == 0) return value;
 			var array = (LegacyArrayLeekValue) value;
@@ -45,7 +44,10 @@ public class LeekOperations {
 			if (level == 0) return value;
 
 			ai.ops(1 + o.size());
-			ai.increaseRAM(2 * o.size());
+			
+			// ram allocated in object, not needed here 
+//			ai.increaseRAM(o.getRam(), 2 * o.size());
+			
 			// Call copy constructor
 			Object object = null;
 			try {
