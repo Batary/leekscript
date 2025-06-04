@@ -28,7 +28,7 @@ public class MapLeekValue extends HashMap<Object, Object> implements Iterable<En
 		this.ai = ai;
 		this.id = ai.getNextObjectID();
 		try {
-			this.ram = ai.allocateRAM(this, 0);
+			this.ram = ai.allocateRAM(this, 0, false);
 		} catch (LeekRunException e) {}
 	}
 
@@ -37,7 +37,7 @@ public class MapLeekValue extends HashMap<Object, Object> implements Iterable<En
 		this.ai = ai;
 		this.id = ai.getNextObjectID();
 		try {
-			this.ram = ai.allocateRAM(this, 0);
+			this.ram = ai.allocateRAM(this, 0, false);
 		} catch (LeekRunException e) {}
 	}
 

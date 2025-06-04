@@ -45,9 +45,6 @@ public class LeekOperations {
 
 			ai.ops(1 + o.size());
 			
-			// ram allocated in object, not needed here 
-//			ai.increaseRAM(o.getRam(), 2 * o.size());
-			
 			// Call copy constructor
 			Object object = null;
 			try {

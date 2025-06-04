@@ -171,6 +171,7 @@ public class Box<T> {
 	}
 
 	public Object sub_eq(Object val) throws LeekRunException {
+		// TODO cast if mUAI.sub has other type than mValue (ie val type != mValue type)
 		return mValue = mUAI.sub(mValue, val);
 	}
 

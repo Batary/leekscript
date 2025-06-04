@@ -10,10 +10,10 @@ public class TestBigInt extends TestCommon {
 
 	public void run() throws Exception {
 
-		header("Big Numbers");
+		header("Big Integers");
 
-		section("Performance");
-
+//		section("Performance");
+//
 //		code_v4_("big_integer a = 1; for (var k in [0..100000]) {a = a << 1;}; return 0;").equals("0"); // warmup
 //		
 //		code_v4_("for (var k in [0..100000]) {var a = 5;}; return 0;").equals("0");
@@ -609,7 +609,7 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("return 3 <= [];").equals("false");
 //		code_v4_("return true <= [];").equals("false");
 //
-		section("Number.operator >");
+//		section("Number.operator >");
 //		code_v4_("return 5L > 2;").equals("true");
 //		code_v4_("return 2 > 5L;").equals("false");
 //		code_v4_("return 5.1 > 2L;").equals("true");
@@ -1322,6 +1322,38 @@ public class TestBigInt extends TestCommon {
 //		code_v4_("integer a = 1 any b = 2L a -= b return a").equals("-1");
 //		code_v4_("integer a = 1 big_integer b = 2 a += b return a").equals("3");
 //		code_v4_("integer a = 1 any b = 2L a += b return a").equals("3");
+		
+		section("Objects");
+//		code_v4_("return BigInteger").equals("<class BigInteger>");
+//		code_v4_("class A { big_integer x = 10 m() { return ++this.x } } return new A().m()").equals("11");
+//		code_v4_("class A { big_integer x = 10 m() { return this.x-- } } return new A().m()").equals("10");
+//		code_v4_("class A { big_integer x = 10 m() { return --this.x } } return new A().m()").equals("9");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x = y return this } } return new A().m(50L)").equals("A {x: 50}");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x = y return this } } return new A().m(50.0)").equals("A {x: 50}");
+//		code_v4_("class A { any x = 10 m(y) { this.x = y return this } } return new A().m(50L)").equals("A {x: 50}");
+//		code_v4_("class A { x = 10L m(y) { this.x = y return this } } return new A().m(50)").equals("A {x: 50}");
+//		code_v4_("class A { integer x = 10 m(y) { this.x = y return this } } return new A().m(50L)").equals("A {x: 50}");
+//		code_v4_("class A { big_integer x = 10L m(y) { this.x += y return this } } return new A().m(50)").equals("A {x: 60}");
+//		code_v4_("class A { big_integer x = 2 / 2 m(y) { this.x += y return this } } return new A().m(50)").equals("A {x: 51}");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x += y return this } } return new A().m(50)").equals("A {x: 60}");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x -= y return this } } return new A().m(50)").equals("A {x: -40}");
+//		code_v4_("class A { x = 10L m(y) { this.x -= y return this } } return new A().m(50)").equals("A {x: -40}");
+//		code_v4_("class A { real x = 10 m(y) { this.x -= y return this } } return new A().m(50L)").equals("A {x: -40.0}");
+//		code_v4_("class A { real x = 10 m(real y) { this.x -= y return this } } return new A().m(50L)").equals("A {x: -40.0}");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x -= y return this } } return new A().m(50)").equals("A {x: -40}");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x *= y return this } } return new A().m(50)").equals("A {x: 500}");
+//		code_v4_("class A { big_integer x = 10 m(y) { this.x /= y return this } } return new A().m(4)").equals("A {x: 2}");
+//		code_v4_("class A { static x = 10 m(y) { x -= y return x } } return new A().m(5L)").equals("5");
+		
+//		// TODO
+//		code_v4_("class A { static integer x = 10 m(y) { x -= y return x } } return new A().m(5)").equals("5");
+		code_v4_("class A { static big_integer x = 10 m(y) { x -= y return x } } return new A().m(5)").equals("5");
+		code_v4_("class A { static integer x = 10 m(y) { x -= y return x } } return new A().m(5L)").equals("5");
 	
+		// TODO check static fields
+		// TODO default args
+		// TODO ops(sqrt)
+		// TODO print a very big number
+		// TODO globals
 	}
 }

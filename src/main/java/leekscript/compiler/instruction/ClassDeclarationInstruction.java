@@ -526,12 +526,22 @@ public class ClassDeclarationInstruction extends LeekInstruction {
 				writer.addLine("super(" + writer.getAIThis() + ");");
 			}
 		}
-		writer.addLine("increaseRAM(" + (2 * fieldVariables.size()) + ");");
+		writer.addLine("allocateRAM(this, " + (2 * fieldVariables.size()) + ");");
 		for (var field : fields.entrySet()) {
+			Expression expr = field.getValue().expression;
 			if (field.getValue().expression != null) {
 				writer.addCode(field.getKey());
 				writer.addCode(" = ");
-				field.getValue().expression.writeJavaCode(mainblock, writer);
+				if (field.getValue().getType() != Type.ANY) {
+					// TODO proper conversion
+//					writer.addCode("((");
+					writer.compileConvert(mainblock, 0, expr, field.getValue().getType());
+//					+ ") (");
+//					expr.writeJavaCode(mainblock, writer);
+//					writer.addCode("))");
+				} else {
+					expr.writeJavaCode(mainblock, writer);
+				}
 				writer.addLine(";");
 			}
 		}

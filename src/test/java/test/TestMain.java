@@ -31,7 +31,7 @@ public class TestMain {
 //		new TestString().run();
 //		new TestSet().run();
 //		new TestArray().run();
-		new TestArrayStress().run();
+//		new TestArrayStress().run();
 //		new TestMap().run();
 //		new TestMapStress().run();
 //		new TestInterval().run();

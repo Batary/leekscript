@@ -25,7 +25,7 @@ public class ObjectLeekValue implements LeekValue {
 	public ObjectLeekValue(AI ai, ClassLeekValue clazz) throws LeekRunException {
 		this.clazz = clazz;
 		this.id = ai.getNextObjectID();
-		this.ram = ai.allocateRAM(this, 0);
+		this.ram = ai.allocateRAM(this, 0, false);
 	}
 
 	public ObjectLeekValue(AI ai, String[] keys, Object[] values) throws LeekRunException {
@@ -45,7 +45,7 @@ public class ObjectLeekValue implements LeekValue {
 				fields.put(field.getKey(), new ObjectVariableValue(ai, LeekOperations.clone(ai, field.getValue().get(), level - 1), field.getValue().level, field.getValue().isFinal));
 			}
 		}
-		ram.add(2 * value.fields.size());
+		ai.increaseRAM(ram, 2 * value.fields.size());
 	}
 
 	public void addField(AI ai, String field, Object value, AccessLevel level, boolean isFinal) throws LeekRunException {

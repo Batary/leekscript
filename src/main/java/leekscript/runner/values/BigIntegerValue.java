@@ -17,31 +17,10 @@ import leekscript.runner.LeekRunException;
  * 
  * @see BigInteger
  */
-public class BigIntegerValue extends Number implements LeekValue/*, AutoCloseable*/ {
+public class BigIntegerValue extends Number implements LeekValue {
 
 	private final BigInteger value;
 	private final AI ai;
-//	private static final Cleaner cleaner = Cleaner.create();
-//    private final Cleaner.Cleanable cleanableInstance;
-//    
-//    static class State implements Runnable {
-//    	private final int ram;
-//    	private final AI ai;
-//    	
-//        State(AI ai, int ram) {
-//            // initialize State needed for cleaning action
-//        	this.ai = ai;
-//        	this.ram = ram;
-//        }
-//
-//        public void run() {
-//            // cleanup action accessing State, executed at most once
-//        	ai.decreaseRAM(ram);
-////        	System.out.println("Release " + ram);
-//        }
-//    }
-//
-//    private final State state;
 
 	public BigIntegerValue(AI ai, String val, int radix) throws LeekRunException {
 		this.ai = ai;
@@ -163,6 +142,7 @@ public class BigIntegerValue extends Number implements LeekValue/*, AutoCloseabl
 	}
 
 	public BigIntegerValue sqrt() throws LeekRunException {
+		// TODO ops
 		return new BigIntegerValue(ai, value.sqrt());
 	}
 

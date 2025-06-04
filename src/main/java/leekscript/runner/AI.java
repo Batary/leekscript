@@ -425,12 +425,16 @@ public abstract class AI {
 	}
 	
 	public RamUsage allocateRAM(Object obj, int ram) throws LeekRunException {
+		return allocateRAM(obj, ram, true);
+	}
+	
+	public RamUsage allocateRAM(Object obj, int ram, boolean checkOverflow) throws LeekRunException {
 		RamUsage ramRef = new RamUsage(ram);
 		// subscribe object to the referenceQueue
 		references.add(new LeekReference(ramRef, obj, referenceQueue));
 
 		mRAM += ram;
-		checkRamOverflow();
+		if (checkOverflow) checkRamOverflow();
 		
 	    return ramRef;
 	}
@@ -468,7 +472,7 @@ public abstract class AI {
 					    referenceFromQueue.clear();
 					}
 				}
-				System.out.println("[RAM error] RAM before: " + ramBefore + " RAM after: " + (mRAM));
+//				System.out.println("[RAM error] RAM before: " + ramBefore + " RAM after: " + (mRAM));
 				if (mRAM > maxRAM) {
 					getLogs().addLog(AILog.WARNING, "[RAM error] RAM before: " + ramBefore + " RAM after: " + mRAM);
 					throw new LeekRunException(Error.OUT_OF_MEMORY);
@@ -3397,6 +3401,11 @@ public abstract class AI {
 		ops(1);
 		addSystemLog(AILog.ERROR, Error.OPERATOR_IN_ON_INVALID_CONTAINER, new Object[] { value });
 		return false;
+	}
+	
+	public Number cast(Number value, Type type) {
+		//TODO change in field_sub_eq in this file, ClassLeekValue and ObjectLeekValue
+		return 0;
 	}
 
 	public long getAnalyzeTime() {

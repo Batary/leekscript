@@ -112,7 +112,7 @@ public class ArrayLeekValue extends ArrayList<Object> implements GenericArrayLee
 		this.ai = ai;
 		this.id = ai.getNextObjectID();
 		try {
-			this.ram = ai.allocateRAM(this, 0);
+			this.ram = ai.allocateRAM(this, 0, false);
 		} catch (LeekRunException e) {}
 	}
 
@@ -121,7 +121,7 @@ public class ArrayLeekValue extends ArrayList<Object> implements GenericArrayLee
 		this.ai = ai;
 		this.id = ai.getNextObjectID();
 		try {
-			this.ram = ai.allocateRAM(this, 0);
+			this.ram = ai.allocateRAM(this, 0, false);
 		} catch (LeekRunException e) {}
 	}
 
